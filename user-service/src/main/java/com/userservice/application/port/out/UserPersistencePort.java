@@ -9,6 +9,4 @@ public interface UserPersistencePort {
 	User findByEmail(String email);
 	User findBynickname(String nickname);
 	void withdraw(String id);
-	boolean existsPhoneNumber(String phoneNumber);
-	boolean existsNickname(String nickname);
 }
