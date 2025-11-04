@@ -1,25 +1,40 @@
-package com.userservice.infrastructure.adapter;
+package com.userservice.infrastructure.adapter.out;
+
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Repository;
 
 import com.userservice.application.port.out.UserPersistencePort;
 import com.userservice.domain.model.User;
+import com.userservice.infrastructure.model.entity.UserEntity;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequiredArgsConstructor
 @Repository
 public class UserPersistenceAdapter implements UserPersistencePort {
+
+	private final UserJpaRepository userJpaRepository;
+
 	@Override
 	public User findById(String id) {
-		return null;
+		UserEntity userEntity = userJpaRepository.findById(id).orElseThrow(NoSuchElementException::new);
+		return UserEntityMapper.toDomain(userEntity);
 	}
 
 	@Override
 	public User save(User user) {
-		return null;
+
+		UserEntity entity = UserEntityMapper.toEntity(user);
+		UserEntity userEntity = userJpaRepository.save(entity);
+
+		return UserEntityMapper.toDomain(userEntity);
 	}
 
 	@Override
-	public User update(User user) {
-		return null;
+	public void update(User user) {
 	}
 
 	@Override
@@ -30,5 +45,10 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 	@Override
 	public User findBynickname(String nickname) {
 		return null;
+	}
+
+	@Override
+	public void withdraw(String id) {
+
 	}
 }

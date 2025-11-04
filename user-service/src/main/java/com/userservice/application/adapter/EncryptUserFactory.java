@@ -1,5 +1,6 @@
 package com.userservice.application.adapter;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.userservice.application.dto.UserContext;
@@ -13,25 +14,30 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class EncryptUserFactory {
 
-	private final EncryptEncoder encryptEncoder;
+	private final PasswordEncoder passwordEncoder;
 
 	public User toEncryptUser(UserContext userContext) {
 		return User.builder()
-			.email(encryptEncoder.encode(userContext.email()))
-			.password(encryptEncoder.encode(userContext.password()))
-			.name(encryptEncoder.encode(userContext.name()))
+			.email(encode(userContext.email()))
+			.password(encode(userContext.password()))
+			.name(encode(userContext.name()))
+			.phoneNumber(encode(userContext.phoneNumber()))
 			.address(
 				Address.builder()
-					.state(encryptEncoder.encode(userContext.state()))
-					.city(encryptEncoder.encode(userContext.city()))
-					.street(encryptEncoder.encode(userContext.state()))
-					.zipCode(encryptEncoder.encode(userContext.zipCode()))
-					.details(encryptEncoder.encode(userContext.addressDetails()))
+					.state(encode(userContext.state()))
+					.city(encode(userContext.city()))
+					.street(encode(userContext.street()))
+					.zipCode(encode(userContext.zipCode()))
+					.details(encode(userContext.addressDetails()))
 					.build()
 			)
+			.oauthId(userContext.oauthId())
 			.profileUrl(userContext.addressDetails())
 			.role(userContext.role())
 			.build();
 	}
 
+	private String encode(String target) {
+		return passwordEncoder.encode(target);
+	}
 }
