@@ -15,7 +15,9 @@ public record UserContext(
 	String street,
 	String city,
 	String addressDetails,
-	UserRole role
+	UserRole role,
+	String phoneNumber,
+	String oauthId
 ) {
 
 }

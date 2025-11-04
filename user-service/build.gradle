@@ -24,7 +24,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
 
-    implementation 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.security:spring-security-crypto'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
