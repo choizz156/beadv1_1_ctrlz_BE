@@ -21,6 +21,7 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
+	private String nickname;
 	private UserRole role;
 	//TODO: google에서 가져옴?
 	private String profileUrl;
@@ -35,7 +36,7 @@ public class User {
 		String id,
 		String name,
 		String email,
-		String password,
+		String password, String nickname,
 		UserRole role,
 		String profileUrl,
 		String oauthId,
@@ -48,6 +49,7 @@ public class User {
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		this.nickname = nickname;
 		this.role = role;
 		this.profileUrl = profileUrl;
 		this.oauthId = oauthId;
