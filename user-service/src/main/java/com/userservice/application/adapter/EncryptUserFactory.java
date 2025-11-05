@@ -33,7 +33,6 @@ public class EncryptUserFactory {
 			)
 			.oauthId(userContext.oauthId())
 			.profileUrl(userContext.addressDetails())
-			.role(userContext.role())
 			.build();
 	}
 

@@ -23,9 +23,7 @@ public class UserEntityMapper {
 			.name(user.getName())
 			.password(user.getPassword())
 			.profileUrl(user.getProfileUrl())
-			.role(user.getRole())
 			.build();
-
 	}
 
 	public static User toDomain(UserEntity userEntity) {
@@ -48,6 +46,7 @@ public class UserEntityMapper {
 			.oauthId(userEntity.getOauthId())
 			.createdAt(userEntity.getCreatedAt())
 			.updatedAt(userEntity.getUpdatedAt())
+			.deleteStatus(userEntity.getDeleteStatus())
 			.build();
 	}
 }

@@ -27,9 +27,10 @@ public class UserEntity extends BaseEntity {
 	private String nickname;
 	private String email;
 	private String password;
-	//TODO: 판매자 등록시 인증??
+
 	@Enumerated(EnumType.STRING)
 	private UserRole role = UserRole.USER;
+
 	private String profileUrl;
 	private String phoneNumber;
 
@@ -41,7 +42,6 @@ public class UserEntity extends BaseEntity {
 		String name,
 		String email,
 		String password,
-		UserRole role,
 		String profileUrl,
 		String phoneNumber,
 		EmbeddedAddress address,
@@ -52,7 +52,6 @@ public class UserEntity extends BaseEntity {
 		this.name = name;
 		this.email = email;
 		this.password = password;
-		this.role = role;
 		this.profileUrl = profileUrl;
 		this.address = address;
 		this.phoneNumber = phoneNumber;

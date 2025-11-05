@@ -1,7 +1,5 @@
 package com.userservice.application.adapter.dto;
 
-import com.userservice.domain.vo.UserRole;
-
 import lombok.Builder;
 
 @Builder
@@ -15,7 +13,6 @@ public record UserContext(
 	String street,
 	String city,
 	String addressDetails,
-	UserRole role,
 	String phoneNumber,
 	String oauthId
 ) {

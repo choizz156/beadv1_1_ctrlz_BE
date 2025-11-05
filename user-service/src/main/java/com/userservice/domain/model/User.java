@@ -2,6 +2,7 @@ package com.userservice.domain.model;
 
 import java.time.LocalDateTime;
 
+import com.common.model.persistence.BaseEntity.DeleteStatus;
 import com.userservice.domain.vo.Address;
 import com.userservice.domain.vo.UserRole;
 
@@ -27,6 +28,7 @@ public class User {
 	private String oauthId;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
+	private DeleteStatus deleteStatus;
 
 	@Builder
 	public User(
@@ -38,7 +40,7 @@ public class User {
 		String profileUrl,
 		Address address, String phoneNumber, String oauthId,
 		LocalDateTime createdAt,
-		LocalDateTime updatedAt
+		LocalDateTime updatedAt, DeleteStatus deleteStatus
 	) {
 		this.id = id;
 		this.name = name;
@@ -52,5 +54,6 @@ public class User {
 		this.oauthId = oauthId;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+		this.deleteStatus = deleteStatus;
 	}
 }
