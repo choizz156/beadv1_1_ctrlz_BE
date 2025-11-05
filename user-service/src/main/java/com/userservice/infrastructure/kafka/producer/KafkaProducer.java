@@ -1,5 +1,6 @@
 package com.userservice.infrastructure.kafka.producer;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
+@Profile("prod")
 @Component
 public class KafkaProducer {
 
