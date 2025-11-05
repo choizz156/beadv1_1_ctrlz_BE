@@ -46,11 +46,11 @@ class KafkaProducerTest {
 	@Test
 	void test1() throws Exception {
 		//given
-		CartCreatedEvent event = new CartCreatedEvent("test_id");
+		CartCreatedEvent event = new CartCreatedEvent("test_id_cart");
 
 		//when
 		testKafkaProducer.send(cartTopicCommand, event);
-		Thread.sleep(500);
+		Thread.sleep(1000);
 
 		//then
 		assertThat(testKafkaConsumer.getTestStore().size()).isEqualTo(1);
@@ -60,11 +60,11 @@ class KafkaProducerTest {
 	@Test
 	void test2() throws Exception {
 		//given
-		DepositCreatedEvent event = new DepositCreatedEvent("test_id");
+		DepositCreatedEvent event = new DepositCreatedEvent("test_id_deposit");
 
 		//when
 		testKafkaProducer.send(depositTopicCommand, event);
-		Thread.sleep(500);
+		Thread.sleep(1000);
 
 		//then
 		assertThat(testKafkaConsumer.getTestStore().size()).isEqualTo(1);
