@@ -11,6 +11,7 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.userservice.infrastructure.kafka.TestKafkaConsumer;
+import com.userservice.infrastructure.kafka.config.TestKafkaProducer;
 import com.userservice.infrastructure.kafka.event.CartCreatedEvent;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -23,7 +24,7 @@ import com.userservice.infrastructure.kafka.event.CartCreatedEvent;
 class KafkaProducerTest {
 
 	@Autowired
-	KafkaProducer kafkaProducer;
+	TestKafkaProducer kafkaProducer;
 
 	@Autowired
 	TestKafkaConsumer testKafkaConsumer;
