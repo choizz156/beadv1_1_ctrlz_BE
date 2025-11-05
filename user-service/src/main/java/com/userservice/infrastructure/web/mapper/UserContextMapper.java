@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.web;
+package com.userservice.infrastructure.web.mapper;
 
 import com.userservice.application.adapter.dto.UserContext;
 import com.userservice.domain.vo.OAuthId;

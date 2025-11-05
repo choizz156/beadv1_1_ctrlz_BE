@@ -9,7 +9,7 @@ import com.common.model.web.BaseResponse;
 import com.userservice.application.adapter.dto.UserContext;
 import com.userservice.application.port.in.UserCommandUseCase;
 import com.userservice.domain.model.User;
-import com.userservice.infrastructure.web.UserContextMapper;
+import com.userservice.infrastructure.web.mapper.UserContextMapper;
 import com.userservice.infrastructure.web.dto.UserCreateRequest;
 import com.userservice.infrastructure.web.dto.UserCreateResponse;
 
