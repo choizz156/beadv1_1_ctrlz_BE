@@ -5,9 +5,9 @@
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.42/8365263844ebb62398e0dc33057ba10ba472d3b8/lombok-1.18.42.jar" />
+          <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.42/8365263844ebb62398e0dc33057ba10ba472d3b8/lombok-1.18.42.jar" />
         </processorPath>
-        <module name="domain-service.main" />
+        <module name="beadv1_1_ctrlz_BE.common.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -54,9 +54,11 @@
       <module name="auth-service.test" options="-parameters" />
       <module name="auth.main" options="-parameters" />
       <module name="auth.test" options="-parameters" />
+      <module name="beadv1_1_ctrlz_BE.common.main" options="-parameters" />
       <module name="cart" options="-parameters" />
       <module name="cart.main" options="-parameters" />
       <module name="cart.test" options="-parameters" />
+      <module name="com.domain-service.common.main" options="-parameters" />
       <module name="comment" options="-parameters" />
       <module name="comment.main" options="-parameters" />
       <module name="comment.test" options="-parameters" />
@@ -70,6 +72,8 @@
       <module name="domain-service.comment" options="-parameters" />
       <module name="domain-service.comment.main" options="-parameters" />
       <module name="domain-service.comment.test" options="-parameters" />
+      <module name="domain-service.common" options="-parameters" />
+      <module name="domain-service.common.test" options="-parameters" />
       <module name="domain-service.main" options="-parameters" />
       <module name="domain-service.order" options="-parameters" />
       <module name="domain-service.order.main" options="-parameters" />
