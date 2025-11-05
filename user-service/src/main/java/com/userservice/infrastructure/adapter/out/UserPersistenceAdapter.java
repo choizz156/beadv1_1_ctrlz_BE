@@ -54,11 +54,11 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
 	@Override
 	public boolean existsPhoneNumber(String phoneNumber) {
-		return userJpaRepository.existByPhoneNumber(phoneNumber);
+		return false;
 	}
 
 	@Override
 	public boolean existsNickname(String nickname) {
-		return userJpaRepository.existsByNickname(nickname);
+		return false;
 	}
 }

@@ -1,18 +1,15 @@
 package com.userservice.infrastructure.adapter.out;
 
-import java.util.UUID;
-
 import com.userservice.domain.model.User;
 import com.userservice.domain.vo.Address;
-import com.userservice.infrastructure.model.vo.EmbeddedAddress;
 import com.userservice.infrastructure.model.entity.UserEntity;
+import com.userservice.infrastructure.model.vo.EmbeddedAddress;
 
 public class UserEntityMapper {
 
 	public static UserEntity toEntity(User user) {
 
 		return UserEntity.builder()
-			.id(UUID.randomUUID().toString())
 			.address(EmbeddedAddress.builder()
 				.city(user.getAddress().getCity())
 				.street(user.getAddress().getStreet())
@@ -48,7 +45,7 @@ public class UserEntityMapper {
 				.details(userEntity.getAddress().getDetails())
 				.build())
 			.phoneNumber(userEntity.getPhoneNumber())
-			.oauthId(userEntity.getOAuthId())
+			.oauthId(userEntity.getOauthId())
 			.createdAt(userEntity.getCreatedAt())
 			.updatedAt(userEntity.getUpdatedAt())
 			.build();

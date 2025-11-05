@@ -8,12 +8,10 @@ import com.userservice.domain.vo.UserRole;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 @Getter
 public class User {
 
@@ -23,11 +21,10 @@ public class User {
 	private String password;
 	private String nickname;
 	private UserRole role;
-	//TODO: google에서 가져옴?
 	private String profileUrl;
-	private String oauthId;
 	private Address address;
 	private String phoneNumber;
+	private String oauthId;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 
@@ -39,9 +36,7 @@ public class User {
 		String password, String nickname,
 		UserRole role,
 		String profileUrl,
-		String oauthId,
-		Address address,
-		String phoneNumber,
+		Address address, String phoneNumber, String oauthId,
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt
 	) {
@@ -52,30 +47,10 @@ public class User {
 		this.nickname = nickname;
 		this.role = role;
 		this.profileUrl = profileUrl;
-		this.oauthId = oauthId;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
+		this.oauthId = oauthId;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-	}
-
-	public String getZipCode() {
-		return this.address.getZipCode();
-	}
-
-	public String getState() {
-		return this.address.getState();
-	}
-
-	public String getCity() {
-		return this.address.getCity();
-	}
-
-	public String getDetails() {
-		return this.address.getDetails();
-	}
-
-	public String getStreet() {
-		return this.address.getStreet();
 	}
 }
