@@ -20,18 +20,18 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 	private final UserJpaRepository userJpaRepository;
 
 	@Override
-	public User findById(String id) {
-		UserEntity userEntity = userJpaRepository.findById(id)
-			.orElseThrow(() -> new CustomException(UserExceptionCode.USER_NOT_FOUND.getMessage()));
-		return UserEntityMapper.toDomain(userEntity);
-	}
-
-	@Override
 	public User save(User user) {
 
 		UserEntity entity = UserEntityMapper.toEntity(user);
 		UserEntity userEntity = userJpaRepository.save(entity);
 
+		return UserEntityMapper.toDomain(userEntity);
+	}
+
+	@Override
+	public User findById(String id) {
+		UserEntity userEntity = userJpaRepository.findById(id)
+			.orElseThrow(() -> new CustomException(UserExceptionCode.USER_NOT_FOUND.getMessage()));
 		return UserEntityMapper.toDomain(userEntity);
 	}
 
