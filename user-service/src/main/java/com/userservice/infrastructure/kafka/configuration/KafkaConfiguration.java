@@ -28,8 +28,6 @@ public class KafkaConfiguration {
 	@Value("${custom.config.topic-replications}")
 	private int topicReplications;
 
-	private String cartTopicValue;
-
 	@Bean
 	public KafkaTemplate<String, Object> kafkaTemplate(
 		ProducerFactory<String, Object> producerFactory

@@ -6,7 +6,7 @@ import com.common.exception.CustomException;
 import com.common.exception.vo.UserExceptionCode;
 import com.userservice.application.port.out.UserPersistencePort;
 import com.userservice.domain.model.User;
-import com.userservice.infrastructure.jpa.infrastructure.UserJpaRepository;
+import com.userservice.infrastructure.jpa.repository.UserJpaRepository;
 import com.userservice.infrastructure.jpa.entity.UserEntity;
 
 import lombok.RequiredArgsConstructor;
