@@ -69,4 +69,5 @@ public abstract class BaseEntity {
 	public enum DeleteStatus {
 		N, D
 	}
+
 }
