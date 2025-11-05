@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.userservice.application.dto.UserContext;
+import com.userservice.application.adapter.dto.UserContext;
 import com.userservice.application.port.in.UserCommandUseCase;
 import com.userservice.application.port.out.UserPersistencePort;
 import com.userservice.domain.model.User;
-import com.userservice.infrastructure.kafka.event.CartCreatedEvent;
+import com.userservice.application.adapter.event.CartCreatedEvent;
+import com.userservice.application.adapter.event.DepositCreatedEvent;
 import com.userservice.infrastructure.kafka.producer.KafkaProducer;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,9 @@ public class UserApplication implements UserCommandUseCase {
 	@Value("${custom.cart.topic.command}")
 	private String cartTopicCommand;
 
+	@Value("${custom.deposit.topic.command}")
+	private String depositTopicCommand;
+
 	private final UserPersistencePort userPersistencePort;
 	private final EncryptUserFactory encryptUserFactory;
 	private final KafkaProducer kafkaProducer;
@@ -33,16 +37,11 @@ public class UserApplication implements UserCommandUseCase {
 		verifyPhoneNumber(userContext.phoneNumber());
 		verifyNickname(userContext.nickname());
 
-		//암호화
 		User encryptUser = encryptUserFactory.toEncryptUser(userContext);
 
 		User savedUser = userPersistencePort.save(encryptUser);
 
-		//TODO: kafka 모듈을 따로 분리할지 고료
-
-		// deposit
-
-
+		kafkaProducer.send(depositTopicCommand, new DepositCreatedEvent(savedUser.getId()));
 		kafkaProducer.send(cartTopicCommand, new CartCreatedEvent(savedUser.getId()));
 
 		return savedUser;

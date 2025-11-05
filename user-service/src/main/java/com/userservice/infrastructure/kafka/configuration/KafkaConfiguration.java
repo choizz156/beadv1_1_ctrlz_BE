@@ -15,6 +15,10 @@ public class KafkaConfiguration {
 
 	@Value("${custom.cart.topic.command}")
 	private String cartTopicCommand;
+
+	@Value("${custom.deposit.topic.command}")
+	private String depositTopicCommand;
+
 	@Value("${custom.config.topic-partitions}")
 	private int topicPartitions;
 	@Value("${custom.config.topic-replications}")
@@ -32,6 +36,14 @@ public class KafkaConfiguration {
 	@Bean
 	public NewTopic createCartsCommandTopic() {
 		return TopicBuilder.name(cartTopicCommand)
+			.partitions(topicPartitions)
+			.replicas(topicReplications)
+			.build();
+	}
+
+	@Bean
+	public NewTopic createDepositCommandTopic() {
+		return TopicBuilder.name(depositTopicCommand)
 			.partitions(topicPartitions)
 			.replicas(topicReplications)
 			.build();
