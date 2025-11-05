@@ -3,7 +3,7 @@ package com.userservice.application.adapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.userservice.application.dto.UserContext;
+import com.userservice.application.adapter.dto.UserContext;
 import com.userservice.domain.model.User;
 import com.userservice.domain.vo.Address;
 

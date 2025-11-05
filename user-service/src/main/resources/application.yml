@@ -29,11 +29,6 @@ spring:
         enable.idempotence: true
         allow.auto.create.topics: false
 
-
-
-
-
-
 custom:
   config:
     topic-partitions: 1
@@ -43,4 +38,7 @@ custom:
     topic:
       command: cart-command
 
+  deposit:
+    topic:
+      command: deposit-command
 

@@ -1,4 +1,4 @@
-package com.userservice.application.dto;
+package com.userservice.application.adapter.dto;
 
 import com.userservice.domain.vo.UserRole;
 

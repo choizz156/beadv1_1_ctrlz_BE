@@ -1,6 +1,6 @@
 package com.userservice.application.port.in;
 
-import com.userservice.application.dto.UserContext;
+import com.userservice.application.adapter.dto.UserContext;
 import com.userservice.domain.model.User;
 
 public interface UserCommandUseCase {
