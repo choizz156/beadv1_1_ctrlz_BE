@@ -1,8 +1,8 @@
-package com.userservice.infrastructure.model.entity;
+package com.userservice.infrastructure.jpa.entity;
 
 import com.common.model.persistence.BaseEntity;
 import com.userservice.domain.vo.UserRole;
-import com.userservice.infrastructure.model.vo.EmbeddedAddress;
+import com.userservice.infrastructure.jpa.vo.EmbeddedAddress;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

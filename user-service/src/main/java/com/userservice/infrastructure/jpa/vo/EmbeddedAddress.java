@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.model.vo;
+package com.userservice.infrastructure.jpa.vo;
 
 import jakarta.persistence.Embeddable;
 import lombok.Builder;

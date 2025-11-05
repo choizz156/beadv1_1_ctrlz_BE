@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.adapter.out;
+package com.userservice.infrastructure.jpa.adapter;
 
 import org.springframework.stereotype.Repository;
 
@@ -6,7 +6,8 @@ import com.common.exception.CustomException;
 import com.common.exception.vo.UserExceptionCode;
 import com.userservice.application.port.out.UserPersistencePort;
 import com.userservice.domain.model.User;
-import com.userservice.infrastructure.model.entity.UserEntity;
+import com.userservice.infrastructure.jpa.infrastructure.UserJpaRepository;
+import com.userservice.infrastructure.jpa.entity.UserEntity;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

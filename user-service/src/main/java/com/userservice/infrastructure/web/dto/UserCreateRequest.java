@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.adapter.api;
+package com.userservice.infrastructure.web.dto;
 
 public record UserCreateRequest(
 	String email,

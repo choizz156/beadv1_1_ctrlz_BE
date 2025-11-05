@@ -1,9 +1,9 @@
-package com.userservice.infrastructure.adapter.out;
+package com.userservice.infrastructure.jpa.adapter;
 
 import com.userservice.domain.model.User;
 import com.userservice.domain.vo.Address;
-import com.userservice.infrastructure.model.entity.UserEntity;
-import com.userservice.infrastructure.model.vo.EmbeddedAddress;
+import com.userservice.infrastructure.jpa.entity.UserEntity;
+import com.userservice.infrastructure.jpa.vo.EmbeddedAddress;
 
 public class UserEntityMapper {
 
