@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.kafka.configuration;
+package com.userservice.configuration;
 
 import java.util.concurrent.Executor;
 

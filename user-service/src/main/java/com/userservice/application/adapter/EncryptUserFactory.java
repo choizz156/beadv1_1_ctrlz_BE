@@ -32,7 +32,7 @@ public class EncryptUserFactory {
 					.build()
 			)
 			.oauthId(userContext.oauthId())
-			.profileUrl(userContext.addressDetails())
+			.profileUrl(userContext.profileImageUrl())
 			.build();
 	}
 

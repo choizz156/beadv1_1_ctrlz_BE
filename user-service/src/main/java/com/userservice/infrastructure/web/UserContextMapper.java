@@ -18,6 +18,7 @@ public class UserContextMapper {
 			.zipCode(request.zipCode())
 			.nickname(request.nickname())
 			.oauthId(OAuthId.GOOGLE.name())
+			.profileImageUrl(request.profileImageUrl())
 			.build();
 	}
 }
