@@ -1,5 +1,7 @@
 package com.asset.image.application;
 
+import static java.nio.file.Files.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -50,36 +52,38 @@ public class ImageService implements AssetService<Image> {
 		validateFile(file);
 
 		String originalFileName = file.getOriginalFilename();
-		String storedFileName = generateFileName(originalFileName);
-		String s3key = generateS3Key(storedFileName);
-
 		File compressedFile = compressor.compressToWebp(originalFileName, file);
+
+		String storedFileName = generateFileName(compressedFile.getName());
+		String s3key = generateS3Key(storedFileName);
+		String s3Url = getS3Url(s3key);
 
 		try {
 			uploadToS3(compressedFile, s3key);
+
+			Image image = Image.builder()
+				.originalFileName(originalFileName)
+				.storedFileName(storedFileName)
+				.s3Url(s3Url)
+				.s3Key(s3key)
+				.originalFileSize(file.getSize())
+				.originalContentType(file.getContentType())
+				.compressedFileSize(compressedFile.length())
+				.convertedContentType(Files.probeContentType(compressedFile.toPath()))
+				.build();
+
+			return imageRepository.save(image);
 		} catch (Exception e) {
 			log.error("이미지 저장 실패 error: {} ", e.getMessage());
 			throw new RuntimeException(e);
 		}
-
-		String s3Url = getS3Url(s3key);
-		Image image = Image.builder()
-			.originalFileName(originalFileName)
-			.storedFileName(storedFileName)
-			.s3Url(s3Url)
-			.s3Key(s3key)
-			.fileSize(file.getSize())
-			.contentType(file.getContentType())
-			.build();
-
-		return imageRepository.save(image);
 	}
 
 	private void uploadToS3(File file, String s3key) throws IOException {
 		PutObjectRequest request = PutObjectRequest.builder()
 			.bucket(bucketName)
 			.key(s3key)
-			.contentType(Files.probeContentType(file.toPath()))
+			.contentType(probeContentType(file.toPath()))
 			.contentLength(file.length())
 			.build();
 

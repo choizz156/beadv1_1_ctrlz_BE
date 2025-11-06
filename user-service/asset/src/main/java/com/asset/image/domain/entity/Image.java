@@ -29,10 +29,16 @@ public class Image extends BaseEntity {
 	private String s3Key;
 
 	@Column(nullable = false)
-	private Long fileSize;
+	private Long originalFileSize;
 
 	@Column(nullable = false)
-	private String contentType;
+	private String originalContentType;
+
+	@Column(nullable = false)
+	private Long compressedFileSize;
+
+	@Column(nullable = false)
+	private String convertedContentType;
 
 	@Builder
 	public Image(
@@ -40,15 +46,19 @@ public class Image extends BaseEntity {
 		String storedFileName,
 		String s3Url,
 		String s3Key,
-		Long fileSize,
-		String contentType
+		Long originalFileSize,
+		String originalContentType,
+		Long compressedFileSize,
+		String convertedContentType
 	) {
 		this.originalFileName = originalFileName;
 		this.storedFileName = storedFileName;
 		this.s3Url = s3Url;
 		this.s3Key = s3Key;
-		this.fileSize = fileSize;
-		this.contentType = contentType;
+		this.originalFileSize = originalFileSize;
+		this.originalContentType = originalContentType;
+		this.compressedFileSize = compressedFileSize;
+		this.convertedContentType = convertedContentType;
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class ImageCompressor {
 
 		try {
 			return ImmutableImage.loader()
-				.fromFile(originalFile.getResource().getFile())
+				.fromBytes(originalFile.getBytes())
 				.output(WebpWriter.DEFAULT.withLossless(), new File(fileName + ".webp"));
 		} catch (IOException e) {
 			log.info("이미지 압축 에러 e = {}", e.getMessage());
