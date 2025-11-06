@@ -4,14 +4,14 @@ import org.springframework.stereotype.Component;
 
 import com.userservice.application.port.out.UserPersistencePort;
 import com.userservice.domain.model.User;
-import com.userservice.infrastructure.reader.port.UserInformationReader;
+import com.userservice.infrastructure.reader.port.UserReaderPort;
 import com.userservice.infrastructure.reader.port.dto.UserDescription;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
-public class UserReader implements UserInformationReader {
+public class UserReaderAdapter implements UserReaderPort {
 
 	private final UserPersistencePort userPersistencePort;
 	@Override
