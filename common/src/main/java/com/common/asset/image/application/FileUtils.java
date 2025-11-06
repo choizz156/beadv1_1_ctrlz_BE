@@ -3,7 +3,9 @@ package com.common.asset.image.application;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class FileUtils {
 	public static String getFileExtension(String fileName) {
 		int lastIndexOf = fileName.lastIndexOf(".");
@@ -15,13 +17,13 @@ public class FileUtils {
 
 	public static String generateFileName(String originalFileName) {
 		String extension = getFileExtension(originalFileName);
-		String uuid = UUID.randomUUID().toString();
+		String uuid = UUID.randomUUID().toString().substring(0, 8);
 		return uuid + "." + extension;
 	}
 
-	public static String generateS3Key(String fileName) {
+	public static String generateS3Key(String fileName, String from) {
 		String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-		return "images/" + date + fileName;
+		return "images/%s/%s/%s".formatted(from, date, fileName);
 	}
 
 	public static String getS3Url(String bucketName, String s3Key) {
