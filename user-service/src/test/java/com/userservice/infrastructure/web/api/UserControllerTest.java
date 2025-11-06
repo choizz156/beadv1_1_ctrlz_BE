@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.common.asset.image.infrastructure.ProfileImageUploadClient;
 import com.common.asset.image.infrastructure.dto.ImageUrlResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.userservice.infrastructure.web.dto.UserCreateRequest;
+import com.userservice.infrastructure.api.dto.UserCreateRequest;
 
 import software.amazon.awssdk.services.s3.S3Client;
 

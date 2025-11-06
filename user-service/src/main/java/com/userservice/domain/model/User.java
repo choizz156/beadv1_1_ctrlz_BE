@@ -1,6 +1,7 @@
 package com.userservice.domain.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.common.model.persistence.BaseEntity.DeleteStatus;
 import com.userservice.domain.vo.Address;
@@ -12,7 +13,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 @Getter
 public class User {
 
@@ -21,7 +22,7 @@ public class User {
 	private String email;
 	private String password;
 	private String nickname;
-	private UserRole role;
+	private List<UserRole> roles;
 	private String profileUrl;
 	private Address address;
 	private String phoneNumber;
@@ -35,19 +36,23 @@ public class User {
 		String id,
 		String name,
 		String email,
-		String password, String nickname,
-		UserRole role,
+		String password,
+		String nickname,
+		List<UserRole> roles,
 		String profileUrl,
-		Address address, String phoneNumber, String oauthId,
+		Address address,
+		String phoneNumber,
+		String oauthId,
 		LocalDateTime createdAt,
-		LocalDateTime updatedAt, DeleteStatus deleteStatus
+		LocalDateTime updatedAt,
+		DeleteStatus deleteStatus
 	) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
-		this.role = role;
+		this.roles = roles;
 		this.profileUrl = profileUrl;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
@@ -55,5 +60,9 @@ public class User {
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deleteStatus = deleteStatus;
+	}
+
+	public List<String> getRolesToString() {
+		return List.of(roles.toArray(new String[0]));
 	}
 }

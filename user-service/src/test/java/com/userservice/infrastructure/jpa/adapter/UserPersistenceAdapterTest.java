@@ -2,6 +2,8 @@ package com.userservice.infrastructure.jpa.adapter;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +42,7 @@ class UserPersistenceAdapterTest {
 					.details("101동 202호")
 					.build()
 			)
-			.role(UserRole.USER)
+			.roles(List.of(UserRole.USER))
 			.phoneNumber("010-1234-5678")
 			.oauthId("kakao_1234567890")
 			.build();
@@ -61,7 +63,7 @@ class UserPersistenceAdapterTest {
 		assertThat(result.getUpdatedAt()).isNotNull();
 		assertThat(result.getId()).isInstanceOf(String.class);
 		assertThat(result.getDeleteStatus()).isEqualByComparingTo(BaseEntity.DeleteStatus.N);
-		assertThat(result.getRole()).isEqualByComparingTo(UserRole.USER);
+		assertThat(result.getRoles()).contains(UserRole.USER);
 		assertThat(result.getPhoneNumber()).isEqualTo("010-1234-5678");
 	}
 

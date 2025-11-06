@@ -34,7 +34,7 @@ public class UserEntityMapper {
 			.name(userEntity.getName())
 			.password(userEntity.getPassword())
 			.email(userEntity.getEmail())
-			.role(userEntity.getRole())
+			.roles(userEntity.getRoles())
 			.profileUrl(userEntity.getProfileUrl())
 			.nickname(userEntity.getNickname())
 			.address(Address.builder()

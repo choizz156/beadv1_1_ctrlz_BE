@@ -1,14 +1,19 @@
 package com.userservice.infrastructure.jpa.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.common.model.persistence.BaseEntity;
 import com.userservice.domain.vo.UserRole;
 import com.userservice.infrastructure.jpa.vo.EmbeddedAddress;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,13 +41,13 @@ public class UserEntity extends BaseEntity {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private UserRole role = UserRole.USER;
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<UserRole> roles = new ArrayList<>();
 
 	private String profileUrl;
 
 	@Column(nullable = false)
 	private String phoneNumber;
-
 
 	@Embedded
 	private EmbeddedAddress address;
@@ -66,6 +71,8 @@ public class UserEntity extends BaseEntity {
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 		this.nickname = nickname;
+
+		this.roles.add(UserRole.USER);
 	}
 
 	@Override
