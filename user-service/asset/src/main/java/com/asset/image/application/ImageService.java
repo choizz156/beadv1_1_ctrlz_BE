@@ -79,6 +79,11 @@ public class ImageService implements AssetService<Image> {
 		}
 	}
 
+	@Override
+	public Image getImage(String id) {
+		return imageRepository.findById(id).orElseThrow(() -> new CustomException(FileExceptionCode.NO_SUCH_IMAGE.getValue()));
+	}
+
 	private void uploadToS3(File file, String s3key) throws IOException {
 		PutObjectRequest request = PutObjectRequest.builder()
 			.bucket(bucketName)
