@@ -4,6 +4,7 @@ import com.common.model.persistence.BaseEntity;
 import com.userservice.domain.vo.UserRole;
 import com.userservice.infrastructure.jpa.vo.EmbeddedAddress;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,17 +23,26 @@ import lombok.ToString;
 @Table(name = "users")
 public class UserEntity extends BaseEntity {
 
+	@Column(nullable = false)
 	private String oauthId;
+	@Column(nullable = false)
 	private String name;
+	@Column(nullable = false, unique = true)
 	private String nickname;
+	@Column(nullable = false, unique = true)
 	private String email;
+
 	private String password;
 
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private UserRole role = UserRole.USER;
 
 	private String profileUrl;
+
+	@Column(nullable = false)
 	private String phoneNumber;
+
 
 	@Embedded
 	private EmbeddedAddress address;
