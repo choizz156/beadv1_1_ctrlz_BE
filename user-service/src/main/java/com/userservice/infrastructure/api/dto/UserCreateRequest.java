@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.web.dto;
+package com.userservice.infrastructure.api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.web.dto;
+package com.userservice.infrastructure.api.dto;
 
 import java.util.List;
 import java.util.stream.Collectors;

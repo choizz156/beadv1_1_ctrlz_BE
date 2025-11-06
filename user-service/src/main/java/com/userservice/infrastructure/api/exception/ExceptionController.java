@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.web.exception;
+package com.userservice.infrastructure.api.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,7 +10,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import com.common.exception.CustomException;
 import com.common.model.web.BaseResponse;
-import com.userservice.infrastructure.web.dto.ApiErrorResponse;
+import com.userservice.infrastructure.api.dto.ApiErrorResponse;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;

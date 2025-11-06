@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.web.dto;
+package com.userservice.infrastructure.api.dto;
 
 public record UserCreateResponse(
 	String userId,

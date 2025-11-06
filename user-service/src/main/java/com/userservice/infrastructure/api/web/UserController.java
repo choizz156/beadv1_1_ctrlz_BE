@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.web.api;
+package com.userservice.infrastructure.api.web;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,9 +11,9 @@ import com.common.model.web.BaseResponse;
 import com.userservice.application.adapter.dto.UserContext;
 import com.userservice.application.port.in.UserCommandUseCase;
 import com.userservice.domain.model.User;
-import com.userservice.infrastructure.web.dto.UserCreateRequest;
-import com.userservice.infrastructure.web.dto.UserCreateResponse;
-import com.userservice.infrastructure.web.mapper.UserContextMapper;
+import com.userservice.infrastructure.api.dto.UserCreateRequest;
+import com.userservice.infrastructure.api.dto.UserCreateResponse;
+import com.userservice.infrastructure.api.mapper.UserContextMapper;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

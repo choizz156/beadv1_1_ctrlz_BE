@@ -1,8 +1,8 @@
-package com.userservice.infrastructure.web.mapper;
+package com.userservice.infrastructure.api.mapper;
 
 import com.userservice.application.adapter.dto.UserContext;
 import com.userservice.domain.vo.OAuthId;
-import com.userservice.infrastructure.web.dto.UserCreateRequest;
+import com.userservice.infrastructure.api.dto.UserCreateRequest;
 
 public class UserContextMapper {
 	public static UserContext toContext(UserCreateRequest request, String profileUrl) {
