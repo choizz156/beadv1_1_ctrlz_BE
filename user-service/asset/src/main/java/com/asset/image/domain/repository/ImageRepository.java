@@ -1,8 +1,8 @@
-package com.image.domain.repository;
+package com.asset.image.domain.repository;
 
 import java.util.Optional;
 
-import com.image.domain.entity.Image;
+import com.asset.image.domain.entity.Image;
 
 public interface ImageRepository {
 
