@@ -1,4 +1,4 @@
-package com.asset.image.application.utils;
+package com.common.asset.image.application.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

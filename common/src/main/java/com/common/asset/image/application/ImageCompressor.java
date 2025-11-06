@@ -1,4 +1,4 @@
-package com.asset.image.application;
+package com.common.asset.image.application;
 
 import java.io.File;
 import java.io.IOException;

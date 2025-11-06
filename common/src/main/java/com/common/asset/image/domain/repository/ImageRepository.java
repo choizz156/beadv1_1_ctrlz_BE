@@ -1,4 +1,4 @@
-package com.asset.image.domain.repository;
+package com.common.asset.image.domain.repository;
 
 import java.util.Optional;
 

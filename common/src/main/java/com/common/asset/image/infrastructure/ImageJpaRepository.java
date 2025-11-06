@@ -1,4 +1,4 @@
-package com.asset.image.infrastructure;
+package com.common.asset.image.infrastructure;
 
 import org.springframework.data.repository.Repository;
 
