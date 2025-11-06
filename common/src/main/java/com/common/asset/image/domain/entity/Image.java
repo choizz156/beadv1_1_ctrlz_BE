@@ -4,6 +4,8 @@ import com.common.model.persistence.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,6 +42,10 @@ public class Image extends BaseEntity {
 	@Column(nullable = false)
 	private String convertedContentType;
 
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private	ImageTarget imageTarget;
+
 	@Builder
 	public Image(
 		String originalFileName,
@@ -49,7 +55,7 @@ public class Image extends BaseEntity {
 		Long originalFileSize,
 		String originalContentType,
 		Long compressedFileSize,
-		String convertedContentType
+		String convertedContentType, ImageTarget imageTarget
 	) {
 		this.originalFileName = originalFileName;
 		this.storedFileName = storedFileName;
@@ -59,10 +65,12 @@ public class Image extends BaseEntity {
 		this.originalContentType = originalContentType;
 		this.compressedFileSize = compressedFileSize;
 		this.convertedContentType = convertedContentType;
+		this.imageTarget = imageTarget;
 	}
 
 	@Override
 	protected String getEntitySuffix() {
 		return this.getClass().getAnnotation(Table.class).name();
 	}
+
 }
