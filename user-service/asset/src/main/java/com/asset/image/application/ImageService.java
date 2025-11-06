@@ -1,15 +1,13 @@
 package com.asset.image.application;
 
+import static com.asset.image.application.utils.FileUtils.*;
 import static java.nio.file.Files.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -56,7 +54,7 @@ public class ImageService implements AssetService<Image> {
 
 		String storedFileName = generateFileName(compressedFile.getName());
 		String s3key = generateS3Key(storedFileName);
-		String s3Url = getS3Url(s3key);
+		String s3Url = getS3Url(bucketName, s3key);
 
 		try {
 			uploadToS3(compressedFile, s3key);
@@ -81,7 +79,8 @@ public class ImageService implements AssetService<Image> {
 
 	@Override
 	public Image getImage(String id) {
-		return imageRepository.findById(id).orElseThrow(() -> new CustomException(FileExceptionCode.NO_SUCH_IMAGE.getValue()));
+		return imageRepository.findById(id)
+			.orElseThrow(() -> new CustomException(FileExceptionCode.NO_SUCH_IMAGE.getValue()));
 	}
 
 	private void uploadToS3(File file, String s3key) throws IOException {
@@ -125,28 +124,5 @@ public class ImageService implements AssetService<Image> {
 		List<String> allowed = List.of(allowedExtension.split(","));
 		return allowed.stream()
 			.anyMatch(ext -> ext.trim().equalsIgnoreCase(extension));
-	}
-
-	private String getFileExtension(String fileName) {
-		int lastIndexOf = fileName.lastIndexOf(".");
-		if (lastIndexOf == -1) {
-			return "";
-		}
-		return fileName.substring(lastIndexOf + 1).toLowerCase();
-	}
-
-	private String generateFileName(String originalFileName) {
-		String extension = getFileExtension(originalFileName);
-		String uuid = UUID.randomUUID().toString();
-		return uuid + "." + extension;
-	}
-
-	private String generateS3Key(String fileName) {
-		String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-		return "images/" + date + fileName;
-	}
-
-	private String getS3Url(String s3Key) {
-		return "https://%s.s3.amazonaws.com/%s".formatted(bucketName, s3Key);
 	}
 }
