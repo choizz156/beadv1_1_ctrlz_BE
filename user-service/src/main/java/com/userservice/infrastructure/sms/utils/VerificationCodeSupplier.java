@@ -1,4 +1,4 @@
-package com.userservice.application.adapter.utils;
+package com.userservice.infrastructure.sms.utils;
 
 import java.util.Random;
 import java.util.random.RandomGenerator;
