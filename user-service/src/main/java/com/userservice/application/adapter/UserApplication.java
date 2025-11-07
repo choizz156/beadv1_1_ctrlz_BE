@@ -13,6 +13,7 @@ import com.userservice.application.port.in.UserCommandUseCase;
 import com.userservice.application.port.out.UserPersistencePort;
 import com.userservice.domain.model.User;
 import com.userservice.domain.vo.Address;
+import com.userservice.domain.vo.UserRole;
 import com.userservice.infrastructure.writer.CartClient;
 import com.userservice.infrastructure.writer.dto.CartCreateRequest;
 
@@ -34,6 +35,8 @@ public class UserApplication implements UserCommandUseCase {
 	private final UserPersistencePort userPersistencePort;
 	private final PasswordEncoder passwordEncoder;
 	private final CartClient cartClient;
+	private final SmsService smsService;
+
 
 	@Override
 	public User create(UserContext userContext) {
@@ -53,6 +56,12 @@ public class UserApplication implements UserCommandUseCase {
 
 		return savedUser;
 	}
+
+	@Override
+	public void updateForSeller(String id) {
+		userPersistencePort.updateRole(id, UserRole.SELLER);
+	}
+
 
 	@Override
 	public void update(UserContext userContext) {
