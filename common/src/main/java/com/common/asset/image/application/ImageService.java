@@ -97,10 +97,6 @@ public class ImageService implements AssetService<Image> {
 
 	private void validateFile(MultipartFile file) {
 
-		if (file == null || file.isEmpty()) {
-			throw new CustomException(FileExceptionCode.FILE_EMPTY.getValue());
-		}
-
 		if (file.getSize() > maxSize) {
 			throw new CustomException(
 				FileExceptionCode.FILE_EMPTY.addArgument(String.valueOf(file.getSize()))

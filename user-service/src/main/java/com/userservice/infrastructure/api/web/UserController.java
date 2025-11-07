@@ -1,5 +1,6 @@
 package com.userservice.infrastructure.api.web;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/users")
 public class UserController {
 
+	@Value("${custom.image.default}")
+	private String defaultImageUrl;
+
 	private final UserReaderPort userReaderPort;
 	private final UserCommandUseCase userCommandUseCase;
 	private final ProfileImageUploadClient profileImageUploadClient;
@@ -37,7 +41,10 @@ public class UserController {
 		@Valid @RequestPart("request") UserCreateRequest request
 	) {
 
-		String imageUrl = profileImageUploadClient.uploadImage(profileImage).profileUrl();
+		String imageUrl = (profileImage.isEmpty())
+			? defaultImageUrl
+			: profileImageUploadClient.uploadImage(profileImage).profileUrl();
+
 		UserContext context = UserContextMapper.toContext(request, imageUrl);
 		User user = userCommandUseCase.create(context);
 
