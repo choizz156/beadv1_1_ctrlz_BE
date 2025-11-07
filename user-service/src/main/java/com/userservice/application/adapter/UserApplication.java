@@ -1,18 +1,17 @@
 package com.userservice.application.adapter;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.common.exception.CustomException;
 import com.common.exception.vo.UserExceptionCode;
 import com.userservice.application.adapter.dto.UserContext;
-import com.userservice.application.adapter.event.CartCreatedEvent;
-import com.userservice.application.adapter.event.DepositCreatedEvent;
 import com.userservice.application.port.in.UserCommandUseCase;
 import com.userservice.application.port.out.UserPersistencePort;
 import com.userservice.domain.model.User;
-import com.userservice.infrastructure.kafka.producer.KafkaProducer;
+import com.userservice.domain.vo.Address;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +29,8 @@ public class UserApplication implements UserCommandUseCase {
 	private String depositTopicCommand;
 
 	private final UserPersistencePort userPersistencePort;
-	private final EncryptUserFactory encryptUserFactory;
-	private final KafkaProducer kafkaProducer;
+	private final PasswordEncoder passwordEncoder;
+	// private final KafkaProducer kafkaProducer;
 
 	@Override
 	public User create(UserContext userContext) {
@@ -39,19 +38,21 @@ public class UserApplication implements UserCommandUseCase {
 		verifyNickname(userContext.nickname());
 		verifyPhoneNumber(userContext.phoneNumber());
 
-		User encryptUser = encryptUserFactory.toEncryptUser(userContext);
-		User savedUser = userPersistencePort.save(encryptUser);
+		User user = generateUser(userContext);
 
-		kafkaProducer.send(depositTopicCommand, new DepositCreatedEvent(savedUser.getId()));
-		kafkaProducer.send(cartTopicCommand, new CartCreatedEvent(savedUser.getId()));
+		User savedUser = userPersistencePort.save(user);
+
+		// kafkaProducer.send(depositTopicCommand, new DepositCreatedEvent(savedUser.getId()));
+		// kafkaProducer.send(cartTopicCommand, new CartCreatedEvent(savedUser.getId()));
 
 		return savedUser;
 	}
 
 	@Override
 	public void update(UserContext userContext) {
-		User encryptUser = encryptUserFactory.toEncryptUser(userContext);
-		userPersistencePort.update(encryptUser);
+		User user = generateUser(userContext);
+
+		userPersistencePort.update(user);
 	}
 
 	@Override
@@ -63,6 +64,27 @@ public class UserApplication implements UserCommandUseCase {
 	@Override
 	public User getUser(String id) {
 		return userPersistencePort.findById(id);
+	}
+
+	private User generateUser(UserContext userContext) {
+		return User.builder()
+			.email(userContext.email())
+			.password(passwordEncoder.encode(userContext.password()))
+			.name(userContext.name())
+			.phoneNumber(userContext.phoneNumber())
+			.nickname(userContext.nickname())
+			.address(
+				Address.builder()
+					.state(userContext.state())
+					.city(userContext.city())
+					.street(userContext.street())
+					.zipCode(userContext.zipCode())
+					.details(userContext.addressDetails())
+					.build()
+			)
+			.oauthId(userContext.oauthId())
+			.profileUrl(userContext.profileImageUrl())
+			.build();
 	}
 
 	void verifyNickname(String nickname) {

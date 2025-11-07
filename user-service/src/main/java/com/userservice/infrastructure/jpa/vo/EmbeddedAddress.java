@@ -1,6 +1,9 @@
 package com.userservice.infrastructure.jpa.vo;
 
+import com.userservice.infrastructure.jpa.converter.UserInformationConverter;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -14,15 +17,23 @@ import lombok.ToString;
 @NoArgsConstructor
 @Embeddable
 public class EmbeddedAddress {
-
+	@Convert(converter = UserInformationConverter.class)
 	@Column(nullable = false)
 	private String zipCode;
+
+	@Convert(converter = UserInformationConverter.class)
 	@Column(nullable = false)
 	private String city;
+
+	@Convert(converter = UserInformationConverter.class)
 	@Column(nullable = false)
 	private String street;
+
+	@Convert(converter = UserInformationConverter.class)
 	@Column(nullable = false)
 	private String state;
+
+	@Convert(converter = UserInformationConverter.class)
 	@Column(nullable = false)
 	private String details;
 

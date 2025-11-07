@@ -5,9 +5,11 @@ import java.util.List;
 
 import com.common.model.persistence.BaseEntity;
 import com.userservice.domain.vo.UserRole;
+import com.userservice.infrastructure.jpa.converter.UserInformationConverter;
 import com.userservice.infrastructure.jpa.vo.EmbeddedAddress;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -30,22 +32,27 @@ public class UserEntity extends BaseEntity {
 
 	@Column(nullable = false)
 	private String oauthId;
+
 	@Column(nullable = false)
+	@Convert(converter = UserInformationConverter.class)
 	private String name;
+
 	@Column(nullable = false, unique = true)
 	private String nickname;
+
 	@Column(nullable = false, unique = true)
 	private String email;
 
 	private String password;
 
-	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(fetch = FetchType.EAGER)
+	@Column(nullable = false)
 	private List<UserRole> roles = new ArrayList<>();
 
 	private String profileUrl;
 
+	@Convert(converter = UserInformationConverter.class)
 	@Column(nullable = false)
 	private String phoneNumber;
 
