@@ -35,7 +35,7 @@ import com.userservice.infrastructure.jpa.vo.EmbeddedAddress;
 import com.userservice.infrastructure.writer.CartClient;
 import com.userservice.infrastructure.writer.ProfileImageClient;
 import com.userservice.infrastructure.writer.dto.CartCreateRequest;
-import com.userservice.infrastructure.writer.dto.ImageUrlResponse;
+import com.userservice.infrastructure.writer.dto.ImageResponse;
 
 import software.amazon.awssdk.services.s3.S3Client;
 
@@ -85,7 +85,7 @@ class UserControllerTest {
 			objectMapper.writeValueAsString(request).getBytes());
 
 		when(profileImageClient.uploadImage(any(MultipartFile.class))).thenReturn(
-			new ImageUrlResponse("profileImageUrl"));
+			new ImageResponse("profileImageUrl"));
 		when(cartClient.createCart(any(CartCreateRequest.class))).thenReturn(ResponseEntity.status(200).body(any()));
 
 		// when then
@@ -114,7 +114,7 @@ class UserControllerTest {
 			objectMapper.writeValueAsString(request).getBytes());
 
 		when(profileImageClient.uploadImage(any(MultipartFile.class))).thenReturn(
-			new ImageUrlResponse("profileImageUrl"));
+			new ImageResponse("profileImageUrl"));
 		when(cartClient.createCart(any(CartCreateRequest.class))).thenReturn(ResponseEntity.status(400).body(any()));
 
 		// when then
@@ -139,7 +139,7 @@ class UserControllerTest {
 			objectMapper.writeValueAsString(request).getBytes());
 
 		when(profileImageClient.uploadImage(any(MultipartFile.class))).thenReturn(
-			new ImageUrlResponse("profileImageUrl"));
+			new ImageResponse("profileImageUrl"));
 
 		// when then
 		mockMvc.perform(multipart("/api/users")
