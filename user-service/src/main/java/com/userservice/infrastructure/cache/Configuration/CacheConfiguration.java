@@ -24,11 +24,28 @@ public class CacheConfiguration {
 			CacheType.VERIFICATION_TRY.name(), Caffeine.newBuilder()
 				.initialCapacity(100)
 				.maximumSize(1000)
+				.expireAfterAccess(Duration.ofMinutes(2))
+				.recordStats()
+				.build()
+		);
+
+		cacheManager.registerCustomCache(
+			CacheType.VERIFICATION_CODE.name(), Caffeine.newBuilder()
+				.initialCapacity(100)
+				.maximumSize(1000)
 				.expireAfterAccess(Duration.ofMinutes(1))
 				.recordStats()
 				.build()
 		);
 
+		cacheManager.registerCustomCache(
+			CacheType.VERIFICATION_BAN_ONE_DAY.name(), Caffeine.newBuilder()
+				.initialCapacity(100)
+				.maximumSize(1000)
+				.expireAfterAccess(Duration.ofDays(1))
+				.recordStats()
+				.build()
+		);
 		return cacheManager;
 	}
 }
