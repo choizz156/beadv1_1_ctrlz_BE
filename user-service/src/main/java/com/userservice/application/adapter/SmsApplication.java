@@ -64,6 +64,9 @@ public class SmsApplication implements SellerVerificationUseCase {
 			applyVerificationCount(context.getUserId());
 			throw new CustomException(UserExceptionCode.CODE_MISMATCH.getMessage());
 		}
+
+		verificationTryCache.evict(context.getUserId());
+		verificationCodeCache.evict(context.getUserId());
 	}
 
 	void checkExistingCode(SellerVerificationContext context) {
