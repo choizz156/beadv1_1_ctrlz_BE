@@ -11,4 +11,5 @@ public interface UserPersistencePort {
 	void withdraw(String id);
 	boolean existsPhoneNumber(String phoneNumber);
 	boolean existsNickname(String nickname);
+	void delete(String id);
 }

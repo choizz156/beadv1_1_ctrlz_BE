@@ -1,6 +1,7 @@
 package com.userservice.application.adapter;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,8 @@ import com.userservice.application.port.in.UserCommandUseCase;
 import com.userservice.application.port.out.UserPersistencePort;
 import com.userservice.domain.model.User;
 import com.userservice.domain.vo.Address;
+import com.userservice.infrastructure.writer.CartClient;
+import com.userservice.infrastructure.writer.dto.CartCreateRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +33,7 @@ public class UserApplication implements UserCommandUseCase {
 
 	private final UserPersistencePort userPersistencePort;
 	private final PasswordEncoder passwordEncoder;
-	// private final KafkaProducer kafkaProducer;
+	private final CartClient cartClient;
 
 	@Override
 	public User create(UserContext userContext) {
@@ -39,11 +42,14 @@ public class UserApplication implements UserCommandUseCase {
 		verifyPhoneNumber(userContext.phoneNumber());
 
 		User user = generateUser(userContext);
-
 		User savedUser = userPersistencePort.save(user);
 
-		// kafkaProducer.send(depositTopicCommand, new DepositCreatedEvent(savedUser.getId()));
-		// kafkaProducer.send(cartTopicCommand, new CartCreatedEvent(savedUser.getId()));
+		ResponseEntity<?> response = cartClient.createCart(new CartCreateRequest(savedUser.getId()));
+
+		if(!response.getStatusCode().is2xxSuccessful()) {
+			userPersistencePort.delete(savedUser.getId());
+			throw new RuntimeException("카트 생성 실패");
+		}
 
 		return savedUser;
 	}

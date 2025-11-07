@@ -63,4 +63,9 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 	public boolean existsNickname(String nickname) {
 		return userJpaRepository.existsUserEntitiesByNickname(nickname);
 	}
+
+	@Override
+	public void delete(String id) {
+		userJpaRepository.deleteById(id);
+	}
 }
