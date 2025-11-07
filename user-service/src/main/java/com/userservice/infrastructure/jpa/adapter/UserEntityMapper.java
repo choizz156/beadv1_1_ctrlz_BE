@@ -42,6 +42,7 @@ public class UserEntityMapper {
 				.city(userEntity.getAddress().getCity())
 				.state(userEntity.getAddress().getState())
 				.details(userEntity.getAddress().getDetails())
+				.zipCode(userEntity.getAddress().getZipCode())
 				.build())
 			.phoneNumber(userEntity.getPhoneNumber())
 			.oauthId(userEntity.getOauthId())
