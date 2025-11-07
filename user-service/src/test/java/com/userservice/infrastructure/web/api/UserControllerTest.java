@@ -63,13 +63,16 @@ class UserControllerTest {
 	@Test
 	void test1() throws Exception {
 		// given
-		UserCreateRequest request = new UserCreateRequest("test@test.com", "password", "010-1111-0111", "street",
+		UserCreateRequest request = new UserCreateRequest("test@test.com", "010-1111-0111", "street",
 			"123423", "state", "city", "details", "name", "nickname", "profileImageUrl");
 
-		MockMultipartFile image = new MockMultipartFile("profileImage", "image.jpg", MediaType.IMAGE_JPEG_VALUE, "image content".getBytes());
-		MockMultipartFile requestJson = new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsString(request).getBytes());
+		MockMultipartFile image = new MockMultipartFile("profileImage", "image.jpg", MediaType.IMAGE_JPEG_VALUE,
+			"image content".getBytes());
+		MockMultipartFile requestJson = new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE,
+			objectMapper.writeValueAsString(request).getBytes());
 
-		when(profileImageUploadClient.uploadImage(any(MultipartFile.class))).thenReturn(new ImageUrlResponse("profileImageUrl"));
+		when(profileImageUploadClient.uploadImage(any(MultipartFile.class))).thenReturn(
+			new ImageUrlResponse("profileImageUrl"));
 		when(cartClient.createCart(any(CartCreateRequest.class))).thenReturn(ResponseEntity.status(200).body(any()));
 
 		// when & then
@@ -88,13 +91,16 @@ class UserControllerTest {
 	@Test
 	void test3() throws Exception {
 		// given
-		UserCreateRequest request = new UserCreateRequest("test@test.com", "password", "010-1111-0111", "street",
+		UserCreateRequest request = new UserCreateRequest("test@test.com", "010-1111-0111", "street",
 			"123423", "state", "city", "details", "name", "nickname", "profileImageUrl");
 
-		MockMultipartFile image = new MockMultipartFile("profileImage", "image.jpg", MediaType.IMAGE_JPEG_VALUE, "image content".getBytes());
-		MockMultipartFile requestJson = new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsString(request).getBytes());
+		MockMultipartFile image = new MockMultipartFile("profileImage", "image.jpg", MediaType.IMAGE_JPEG_VALUE,
+			"image content".getBytes());
+		MockMultipartFile requestJson = new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE,
+			objectMapper.writeValueAsString(request).getBytes());
 
-		when(profileImageUploadClient.uploadImage(any(MultipartFile.class))).thenReturn(new ImageUrlResponse("profileImageUrl"));
+		when(profileImageUploadClient.uploadImage(any(MultipartFile.class))).thenReturn(
+			new ImageUrlResponse("profileImageUrl"));
 		when(cartClient.createCart(any(CartCreateRequest.class))).thenReturn(ResponseEntity.status(400).body(any()));
 
 		// when & then
@@ -109,13 +115,16 @@ class UserControllerTest {
 	@Test
 	void test2() throws Exception {
 		// given
-		UserCreateRequest request = new UserCreateRequest("test@test.com", "password", "", "street",
+		UserCreateRequest request = new UserCreateRequest("test@test.com", "", "street",
 			"123423", "state", "city", "details", "name", "nickname", "profileImageUrl");
 
-		MockMultipartFile image = new MockMultipartFile("profileImage", "image.jpg", MediaType.IMAGE_JPEG_VALUE, "image content".getBytes());
-		MockMultipartFile requestJson = new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE, objectMapper.writeValueAsString(request).getBytes());
+		MockMultipartFile image = new MockMultipartFile("profileImage", "image.jpg", MediaType.IMAGE_JPEG_VALUE,
+			"image content".getBytes());
+		MockMultipartFile requestJson = new MockMultipartFile("request", "", MediaType.APPLICATION_JSON_VALUE,
+			objectMapper.writeValueAsString(request).getBytes());
 
-		when(profileImageUploadClient.uploadImage(any(MultipartFile.class))).thenReturn(new ImageUrlResponse("profileImageUrl"));
+		when(profileImageUploadClient.uploadImage(any(MultipartFile.class))).thenReturn(
+			new ImageUrlResponse("profileImageUrl"));
 
 		// when & then
 		mockMvc.perform(multipart("/api/users")
