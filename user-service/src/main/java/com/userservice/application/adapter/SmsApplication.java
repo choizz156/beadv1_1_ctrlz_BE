@@ -32,22 +32,22 @@ public class SmsApplication implements SellerVerificationUseCase {
 
 	private Cache verificationTryCache;
 	private Cache verificationCodeCache;
-	private Cache verificationVanCache;
+	private Cache verificationBanCache;
 
 	@PostConstruct
 	public void init() {
 		verificationTryCache = cacheManager.getCache(CacheType.VERIFICATION_TRY.name());
 		verificationCodeCache = cacheManager.getCache(CacheType.VERIFICATION_CODE.name());
-		verificationVanCache = cacheManager.getCache(CacheType.VERIFICATION_BAN_ONE_DAY.name());
+		verificationBanCache = cacheManager.getCache(CacheType.VERIFICATION_BAN_ONE_DAY.name());
 	}
 
 	@Override
 	public void requestVerificationCode(SellerVerificationContext context) {
 		String code = VerificationCodeSupplier.generateCode();
 
-		checkExistingCode(context, code);
+		checkExistingCode(context);
 
-		verificationTryCache.put(context.getUserId(), code);
+		verificationCodeCache.put(context.getUserId(), code);
 		smsClientAdapter.send(context.getPhoneNumber(), code);
 	}
 
@@ -66,10 +66,9 @@ public class SmsApplication implements SellerVerificationUseCase {
 		}
 	}
 
-	void checkExistingCode(SellerVerificationContext context, String code) {
+	void checkExistingCode(SellerVerificationContext context) {
 		String oldCode = verificationCodeCache.get(context.getUserId(), String.class);
 		if (oldCode != null) {
-			verificationTryCache.put(context.getUserId(), code);
 			throw new CustomException(UserExceptionCode.CODE_MISMATCH.getMessage());
 		}
 	}
@@ -83,14 +82,14 @@ public class SmsApplication implements SellerVerificationUseCase {
 
 		AtomicInteger count = verificationTryCache.get(userId, AtomicInteger.class);
 		if (count == null) {
-			count = new AtomicInteger(1);
+			count = new AtomicInteger(0);
 			verificationTryCache.put(userId, count);
 		}
 
 		int current = count.incrementAndGet();
 		if (current >= 5) {
 			verificationTryCache.evict(userId);
-			verificationVanCache.put("ban_user", userId);
+			verificationBanCache.put("ban_user", userId);
 			throw new CustomException(UserExceptionCode.VERIFICATION_COUNT_LIMIT.getMessage());
 		}
 	}

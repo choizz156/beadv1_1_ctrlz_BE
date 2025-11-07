@@ -35,8 +35,6 @@ public class UserApplication implements UserCommandUseCase {
 	private final UserPersistencePort userPersistencePort;
 	private final PasswordEncoder passwordEncoder;
 	private final CartClient cartClient;
-	private final SmsApplication smsApplication;
-
 
 	@Override
 	public User create(UserContext userContext) {
@@ -61,7 +59,6 @@ public class UserApplication implements UserCommandUseCase {
 	public void updateForSeller(String id) {
 		userPersistencePort.updateRole(id, UserRole.SELLER);
 	}
-
 
 	@Override
 	public void update(UserContext userContext) {

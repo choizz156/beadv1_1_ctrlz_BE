@@ -72,6 +72,7 @@ public class UserController {
 		@PathVariable String id,
 		@RequestBody UpdateSellerRequest request
 	) {
+
 		SellerVerificationContext sellerVerificationContext =
 			SellerVerificationContext.toVerify(id, request.verificationCode());
 
@@ -86,8 +87,9 @@ public class UserController {
 		@PathVariable String id,
 		@RequestBody VerificationReqeust request
 	) {
+		User user = userCommandUseCase.getUser(id);
 		SellerVerificationContext sellerVerificationContext =
-			SellerVerificationContext.forSending(request.phoneNumber(), id, userCommandUseCase);
+			SellerVerificationContext.forSending(request.phoneNumber(), id, user);
 		sellerVerificationUseCase.requestVerificationCode(sellerVerificationContext);
 	}
 }
