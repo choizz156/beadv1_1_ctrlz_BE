@@ -1,6 +1,6 @@
 package com.userservice.infrastructure.sms.adapter;
 
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,11 @@ public class SmsClientAdapter implements SellerVerificationClient {
 
 	private DefaultMessageService messageService;
 
-	private final CountDownLatch smsLatch = new CountDownLatch(10);
+	private final AtomicInteger smsLimit = new AtomicInteger(10);
+
+	public SmsClientAdapter(DefaultMessageService messageService) {
+		this.messageService = messageService;
+	}
 
 	@PostConstruct
 	public void init() {
@@ -41,7 +45,7 @@ public class SmsClientAdapter implements SellerVerificationClient {
 	@Override
 	public void send(String phoneNumber, String verificationCode) {
 
-		if (smsLatch.getCount() == 0) {
+		if (smsLimit.get() == 0) {
 			log.warn("SMS 전송 횟수 초과 - 전화번호: {}", phoneNumber);
 			throw new CustomException("SMS는 더 이상 사용할 수 없습니다.");
 		}
@@ -58,7 +62,7 @@ public class SmsClientAdapter implements SellerVerificationClient {
 
 		try {
 			messageService.send(message);
-			smsLatch.countDown();
+			smsLimit.decrementAndGet();
 		} catch (Exception e) {
 			throw new CustomException(e.getMessage());
 		}

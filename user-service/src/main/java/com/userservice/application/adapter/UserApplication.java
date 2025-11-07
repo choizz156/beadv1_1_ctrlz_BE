@@ -35,7 +35,7 @@ public class UserApplication implements UserCommandUseCase {
 	private final UserPersistencePort userPersistencePort;
 	private final PasswordEncoder passwordEncoder;
 	private final CartClient cartClient;
-	private final SmsService smsService;
+	private final SmsApplication smsApplication;
 
 
 	@Override

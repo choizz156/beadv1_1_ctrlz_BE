@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.common.asset.image.infrastructure.ProfileImageUploadClient;
 import com.common.model.web.BaseResponse;
 import com.userservice.application.adapter.command.SellerVerificationContext;
 import com.userservice.application.adapter.dto.UserContext;
@@ -24,6 +23,7 @@ import com.userservice.infrastructure.api.dto.VerificationReqeust;
 import com.userservice.infrastructure.api.mapper.UserContextMapper;
 import com.userservice.infrastructure.reader.port.UserReaderPort;
 import com.userservice.infrastructure.reader.port.dto.UserDescription;
+import com.userservice.infrastructure.writer.ProfileImageClient;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class UserController {
 	private final UserReaderPort userReaderPort;
 	private final UserCommandUseCase userCommandUseCase;
 	private final SellerVerificationUseCase sellerVerificationUseCase;
-	private final ProfileImageUploadClient profileImageUploadClient;
+	private final ProfileImageClient profileImageClient;
 
 	@PostMapping
 	public BaseResponse<UserCreateResponse> createUser(
@@ -49,7 +49,7 @@ public class UserController {
 
 		String imageUrl = (profileImage.isEmpty())
 			? defaultImageUrl
-			: profileImageUploadClient.uploadImage(profileImage).profileUrl();
+			: profileImageClient.uploadImage(profileImage).imageUrl();
 
 		UserContext context = UserContextMapper.toContext(request, imageUrl);
 		User user = userCommandUseCase.create(context);

@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 @Service
-public class SmsService implements SellerVerificationUseCase {
+public class SmsApplication implements SellerVerificationUseCase {
 
 	private final CacheManager cacheManager;
 	private final SmsClientAdapter smsClientAdapter;
