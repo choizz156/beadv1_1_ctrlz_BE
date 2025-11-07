@@ -1,5 +1,8 @@
 package com.userservice.application.port.in;
 
+import com.userservice.application.adapter.command.SellerVerificationContext;
+
 public interface SellerVerificationUseCase {
-	void sendVerificationCode(String phoneNumber);
+	void requestVerificationCode(SellerVerificationContext sellerVerificationContext);
+	void checkVerificationCode(SellerVerificationContext sellerVerificationContext);
 }
