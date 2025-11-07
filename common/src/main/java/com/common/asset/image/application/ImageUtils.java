@@ -3,10 +3,11 @@ package com.common.asset.image.application;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class FileUtils {
+public class ImageUtils {
 	public static String getFileExtension(String fileName) {
 		int lastIndexOf = fileName.lastIndexOf(".");
 		if (lastIndexOf == -1) {
@@ -17,7 +18,10 @@ public class FileUtils {
 
 	public static String generateFileName(String originalFileName) {
 		String extension = getFileExtension(originalFileName);
-		String uuid = UUID.randomUUID().toString().substring(0, 8);
+		String uuid = UUID.randomUUID()
+			.toString()
+			.replace("-", "")
+			.substring(0, 12);
 		return uuid + "." + extension;
 	}
 
