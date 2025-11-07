@@ -1,7 +1,6 @@
 package com.userservice.infrastructure.sms.adapter;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +32,7 @@ class SmsClientAdapterTest {
 		SmsClientAdapter smsClientAdapter = new SmsClientAdapter(messageService);
 
 		for (int i = 0; i < 10; i++) {
-			assertDoesNotThrow(() -> smsClientAdapter.send("010-1111-1111", "code"));
+			assertThatCode(() -> smsClientAdapter.send("010-1111-1111", "code")).doesNotThrowAnyException();
 		}
 
 		assertThatThrownBy(() -> smsClientAdapter.send("010-1111-1111", "code")  )

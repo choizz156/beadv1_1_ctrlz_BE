@@ -22,7 +22,7 @@ class UserApplicationTest {
 	@Test
 	void test1() throws Exception {
 		//given
-		UserApplication userApplication = new UserApplication(new FakeRepository(), null, null, null);
+		UserApplication userApplication = new UserApplication(new FakeRepository(), null, null);
 		//when//then
 		assertThatThrownBy(() -> userApplication.verifyNickname("test_nickname"))
 			.isInstanceOf(CustomException.class);
@@ -32,7 +32,7 @@ class UserApplicationTest {
 	@Test
 	void test2() throws Exception {
 		//given
-		UserApplication userApplication = new UserApplication(new FakeRepository(), null, null, null);
+		UserApplication userApplication = new UserApplication(new FakeRepository(), null, null);
 		//when//then
 		assertThatThrownBy(() -> userApplication.verifyPhoneNumber("010-1111-1111"))
 			.isInstanceOf(CustomException.class);
@@ -43,7 +43,7 @@ class UserApplicationTest {
 	void test3() throws Exception {
 		//given
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		UserApplication userApplication = new UserApplication(new FakeRepository(), passwordEncoder, cartCreateRequest -> ResponseEntity.badRequest().build(), null);
+		UserApplication userApplication = new UserApplication(new FakeRepository(), passwordEncoder, cartCreateRequest -> ResponseEntity.badRequest().build());
 		UserContext mockUser = UserContext.builder()
 			.email("mockuser@example.com")
 			.nickname("mockNick")
