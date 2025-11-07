@@ -8,7 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.userservice.application.adapter.event.CartCreatedEvent;
@@ -19,8 +21,8 @@ import com.userservice.infrastructure.kafka.config.TestKafkaProducer;
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Disabled("kafka 도입 시 다시 테스트 합니다.")
-// @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-// @ActiveProfiles("test")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 @EmbeddedKafka(
 	kraft = true,
 	partitions = 1,
