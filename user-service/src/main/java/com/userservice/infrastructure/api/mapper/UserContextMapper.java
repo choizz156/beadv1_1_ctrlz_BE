@@ -5,9 +5,10 @@ import com.userservice.application.adapter.dto.UserUpdateContext;
 import com.userservice.domain.vo.OAuthId;
 import com.userservice.infrastructure.api.dto.UserCreateRequest;
 import com.userservice.infrastructure.api.dto.UserUpdateRequest;
+import com.userservice.infrastructure.writer.dto.ImageResponse;
 
 public class UserContextMapper {
-	public static UserContext toContext(UserCreateRequest request, String profileUrl) {
+	public static UserContext toContext(UserCreateRequest request, ImageResponse imageResponse) {
 		return UserContext.builder()
 			.phoneNumber(request.phoneNumber())
 			.addressDetails(request.details())
@@ -20,7 +21,8 @@ public class UserContextMapper {
 			.zipCode(request.zipCode())
 			.nickname(request.nickname())
 			.oauthId(OAuthId.GOOGLE.name())
-			.profileImageUrl(profileUrl)
+			.profileImageUrl(imageResponse.imageUrl())
+			.imageId(imageResponse.imageId() == null ? "default_Image" : imageResponse.imageId())
 			.build();
 	}
 

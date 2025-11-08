@@ -34,6 +34,8 @@ public class UserReaderAdapter implements UserReaderPort {
 			.details(user.getAddress().getDetails())
 			.name(user.getName())
 			.nickname(user.getNickname())
+			.imageId(user.getImageId())
+			.profileImageUrl(user.getProfileImageUrl())
 			.build();
 	}
 }

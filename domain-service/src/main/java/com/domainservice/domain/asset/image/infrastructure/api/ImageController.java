@@ -23,6 +23,6 @@ public class ImageController {
 	@PostMapping
 	public ImageUrlResponse uploadImage(@RequestPart("file") MultipartFile profileImage) {
 		Image image = assetService.uploadUserProfile(profileImage);
-		return new ImageUrlResponse(image.getS3Url());
+		return new ImageUrlResponse(image.getS3Url(), image.getId());
 	}
 }

@@ -27,6 +27,7 @@ public class User {
 	private Address address;
 	private String phoneNumber;
 	private String oauthId;
+	private String imageId;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	private DeleteStatus deleteStatus;
@@ -42,7 +43,7 @@ public class User {
 		String profileImageUrl,
 		Address address,
 		String phoneNumber,
-		String oauthId,
+		String oauthId, String imageId,
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt,
 		DeleteStatus deleteStatus
@@ -57,6 +58,7 @@ public class User {
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 		this.oauthId = oauthId;
+		this.imageId = imageId;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.deleteStatus = deleteStatus;

@@ -27,6 +27,7 @@ import com.userservice.infrastructure.api.mapper.UserContextMapper;
 import com.userservice.infrastructure.reader.port.UserReaderPort;
 import com.userservice.infrastructure.reader.port.dto.UserDescription;
 import com.userservice.infrastructure.writer.ProfileImageClient;
+import com.userservice.infrastructure.writer.dto.ImageResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,11 +51,11 @@ public class UserController {
 		@Valid @RequestPart("request") UserCreateRequest request
 	) {
 
-		String imageUrl = (profileImage.isEmpty())
-			? defaultImageUrl
-			: profileImageClient.uploadImage(profileImage).imageUrl();
+		ImageResponse imageResponse = (profileImage.isEmpty())
+			? new ImageResponse(defaultImageUrl, null)
+			: profileImageClient.uploadImage(profileImage);
 
-		UserContext context = UserContextMapper.toContext(request, imageUrl);
+		UserContext context = UserContextMapper.toContext(request, imageResponse);
 		User user = userCommandUseCase.create(context);
 
 		return new BaseResponse<>(new UserCreateResponse(
