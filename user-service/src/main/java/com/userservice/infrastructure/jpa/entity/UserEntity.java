@@ -86,4 +86,16 @@ public class UserEntity extends BaseEntity {
 	protected String getEntitySuffix() {
 		return UserEntity.class.getAnnotation(Table.class).name();
 	}
+
+	public void updateNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public void updateAddress(EmbeddedAddress address) {
+		this.address = address;
+	}
+
+	public void updatePhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 }

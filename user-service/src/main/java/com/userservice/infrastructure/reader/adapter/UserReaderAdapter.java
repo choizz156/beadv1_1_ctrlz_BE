@@ -1,6 +1,7 @@
 package com.userservice.infrastructure.reader.adapter;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.userservice.application.port.out.UserPersistencePort;
 import com.userservice.domain.model.User;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 public class UserReaderAdapter implements UserReaderPort {
 
 	private final UserPersistencePort userPersistencePort;
+
+	@Transactional(readOnly = true)
 	@Override
 	public UserDescription getUserDescription(String id) {
 

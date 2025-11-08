@@ -1,6 +1,7 @@
 package com.userservice.infrastructure.jpa.adapter;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.common.exception.CustomException;
 import com.common.exception.vo.UserExceptionCode;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 @Repository
 public class UserPersistenceAdapter implements UserPersistencePort {
 
@@ -38,6 +40,12 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
 	@Override
 	public void update(User user) {
+		UserEntity userEntity = userJpaRepository.findById(user.getId())
+			.orElseThrow(() -> new CustomException(UserExceptionCode.USER_NOT_FOUND.getMessage()));
+
+		userEntity.updateNickname(user.getNickname());
+		userEntity.updatePhoneNumber(user.getPhoneNumber());
+		userEntity.updateAddress(UserEntityMapper.toEmbeddedAddress(user.getAddress()));
 	}
 
 	@Override

@@ -65,4 +65,16 @@ public class User {
 	public List<String> getRolesToString() {
 		return roles.stream().map(Enum::name).toList();
 	}
+
+	public void updateAddress(Address updatedAddress) {
+		this.address = updatedAddress;
+	}
+
+	public void updatePhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public void updateNickname(String nickname) {
+		this.nickname = nickname;
+	}
 }

@@ -51,4 +51,14 @@ public class UserEntityMapper {
 			.deleteStatus(userEntity.getDeleteStatus())
 			.build();
 	}
+
+	public static EmbeddedAddress toEmbeddedAddress(Address address) {
+		return EmbeddedAddress.builder()
+			.city(address.getCity())
+			.street(address.getStreet())
+			.zipCode(address.getZipCode())
+			.state(address.getState())
+			.details(address.getDetails())
+			.build();
+	}
 }

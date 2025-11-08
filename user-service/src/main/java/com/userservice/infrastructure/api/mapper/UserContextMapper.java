@@ -1,8 +1,10 @@
 package com.userservice.infrastructure.api.mapper;
 
 import com.userservice.application.adapter.dto.UserContext;
+import com.userservice.application.adapter.dto.UserUpdateContext;
 import com.userservice.domain.vo.OAuthId;
 import com.userservice.infrastructure.api.dto.UserCreateRequest;
+import com.userservice.infrastructure.api.dto.UserUpdateRequest;
 
 public class UserContextMapper {
 	public static UserContext toContext(UserCreateRequest request, String profileUrl) {
@@ -19,6 +21,18 @@ public class UserContextMapper {
 			.nickname(request.nickname())
 			.oauthId(OAuthId.GOOGLE.name())
 			.profileImageUrl(profileUrl)
+			.build();
+	}
+
+	public static UserUpdateContext toContext(UserUpdateRequest request) {
+		return UserUpdateContext.builder()
+			.nickname(request.nickname())
+			.phoneNumber(request.phoneNumber())
+			.street(request.street())
+			.zipCode(request.zipCode())
+			.state(request.state())
+			.city(request.city())
+			.details(request.details())
 			.build();
 	}
 }
