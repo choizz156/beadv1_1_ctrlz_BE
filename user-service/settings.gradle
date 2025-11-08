@@ -1,4 +1,6 @@
 rootProject.name = 'user-service'
 
+include("auth")
 include(":common")
 project(":common").projectDir = file("../common")
+
