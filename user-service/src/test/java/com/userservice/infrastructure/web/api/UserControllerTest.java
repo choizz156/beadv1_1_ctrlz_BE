@@ -86,7 +86,7 @@ class UserControllerTest {
 			objectMapper.writeValueAsString(request).getBytes());
 
 		when(profileImageClient.uploadImage(any(MultipartFile.class))).thenReturn(
-			new ImageResponse("profileImageUrl"));
+			new ImageResponse("profileImageUrl","imageId"));
 		when(cartClient.createCart(any(CartCreateRequest.class))).thenReturn(ResponseEntity.status(200).body(any()));
 
 		// when then
@@ -115,7 +115,7 @@ class UserControllerTest {
 			objectMapper.writeValueAsString(request).getBytes());
 
 		when(profileImageClient.uploadImage(any(MultipartFile.class))).thenReturn(
-			new ImageResponse("profileImageUrl"));
+			new ImageResponse("profileImageUrl", "imageId"));
 		when(cartClient.createCart(any(CartCreateRequest.class))).thenReturn(ResponseEntity.status(400).body(any()));
 
 		// when then
@@ -140,7 +140,7 @@ class UserControllerTest {
 			objectMapper.writeValueAsString(request).getBytes());
 
 		when(profileImageClient.uploadImage(any(MultipartFile.class))).thenReturn(
-			new ImageResponse("profileImageUrl"));
+			new ImageResponse("profileImageUrl", "imageId"));
 
 		// when then
 		mockMvc.perform(multipart("/api/users")
