@@ -117,15 +117,4 @@ public class JwtTokenProvider {
 		Date expiration = claims.getExpiration();
 		return expiration.toInstant();
 	}
-
-	public boolean isTokenType(String token, String expectedType) {
-		try {
-			Claims claims = parseClaims(token);
-			String type = claims.get("type", String.class);
-			return expectedType.equals(type);
-		} catch (Exception e) {
-			log.error("토큰 타입 확인 실패: {}", e.getMessage());
-			return false;
-		}
-	}
 }
