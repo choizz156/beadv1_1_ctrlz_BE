@@ -4,10 +4,9 @@ import com.user.application.adapter.dto.UserContext;
 import com.user.application.adapter.dto.UserUpdateContext;
 import com.user.infrastructure.api.dto.UserCreateRequest;
 import com.user.infrastructure.api.dto.UserUpdateRequest;
-import com.user.infrastructure.feign.dto.ImageResponse;
 
 public class UserContextMapper {
-	public static UserContext toContext(UserCreateRequest request, ImageResponse imageResponse) {
+	public static UserContext toContext(UserCreateRequest request, String imageUrl) {
 		return UserContext.builder()
 			.phoneNumber(request.phoneNumber())
 			.addressDetails(request.details())
@@ -20,8 +19,8 @@ public class UserContextMapper {
 			.zipCode(request.zipCode())
 			.nickname(request.nickname())
 			.oauthId(request.oauthId())
-			.profileImageUrl(imageResponse.imageUrl())
-			.imageId(imageResponse.imageId() == null ? "default_Image" : imageResponse.imageId())
+			.profileImageUrl(imageUrl)
+			.imageId("default_Image")
 			.build();
 	}
 
