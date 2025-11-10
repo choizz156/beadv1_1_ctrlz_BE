@@ -40,7 +40,7 @@ public class AuthController {
 		response.addHeader("Set-Cookie", accessTokenCookie.toString());
 	}
 
-	@PostMapping("/logsout")
+	@PostMapping("/logout")
 	public void logout(HttpServletRequest request) {
 		String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String token = bearerToken.replace("Bearer ", "");
