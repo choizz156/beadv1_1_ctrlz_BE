@@ -86,9 +86,9 @@ public class SecurityConfiguration {
 					"/oauth2/**",
 					"/login/**"
 				).permitAll()
-
-				// H2 콘솔 (개발 환경에서만)
+				// H2 콘솔
 				.requestMatchers("/h2-console/**").permitAll()
+				// .requestMatchers(HttpMethod.GET, "/api/users/**").authenticated()
 
 				.anyRequest().permitAll()
 			)
