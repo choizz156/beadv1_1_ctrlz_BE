@@ -12,9 +12,6 @@ import com.user.infrastructure.feign.dto.ImageResponse;
 @FeignClient(name = "profile-image-service", url = "localhost:8081")
 public interface ProfileImageClient {
 
-	@PostMapping(value = "/api/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	ImageResponse uploadImage(@RequestPart("file") MultipartFile profileImage);
-
 	@PostMapping(value = "/api/images/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	ImageResponse updateProfileImage(@RequestPart("file") MultipartFile profileImage, @PathVariable("id") String id);
 }
