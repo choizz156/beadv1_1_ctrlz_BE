@@ -58,48 +58,46 @@ public class ImageService implements AssetService<Image> {
 	private final ImageRepository imageRepository;
 	private final ImageCompressor compressor;
 
-    @Transactional
-    public List<Image> uploadProductImages(List<MultipartFile> files) {
-        return IntStream.range(0, files.size())
-                .mapToObj(i -> {
-                    MultipartFile file = files.get(i);
-                    return uploadUserProfile(file, ImageTarget.PRODUCT);
-                })
-                .toList();
-    }
-
-    // ImageTarget 으로 구분하는 경우는 없는 것 같아서 기존 코드는 냅두고 새로 만듬 - 정현
-    public Image uploadUserProfile(MultipartFile file, ImageTarget target) {
-        validateFile(file);
-
-        String originalFileName = file.getOriginalFilename();
-        File compressedFile = compressor.compressToWebp(originalFileName, file);
-
-        String storedFileName = generateFileName(compressedFile.getName());
-        String s3key = generateS3Key(storedFileName, target.name());
-        String s3Url = getS3Url(bucketName, s3key);
-
-        try {
-            uploadToS3(compressedFile, s3key);
-
-            Image image = Image.builder()
-                    .originalFileName(originalFileName)
-                    .storedFileName(storedFileName)
-                    .s3Url(s3Url)
-                    .s3Key(s3key)
-                    .originalFileSize(file.getSize())
-                    .originalContentType(file.getContentType())
-                    .compressedFileSize(compressedFile.length())
-                    .convertedContentType(Files.probeContentType(compressedFile.toPath()))
-                    .imageTarget(target)
-                    .build();
-
-            return imageRepository.save(image);
-        } catch (Exception e) {
-            log.error("이미지 저장 실패 error: {} ", e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
+    // public List<Image> uploadProductImages(List<MultipartFile> files) {
+    //     return files.stream().map(multipartFile -> {
+	// 			MultipartFile file = multipartFile;
+	// 			return uploadUserProfile(file, ImageTarget.PRODUCT);
+	// 		})
+    //             .toList();
+    // }
+	//
+    // // ImageTarget 으로 구분하는 경우는 없는 것 같아서 기존 코드는 냅두고 새로 만듬 - 정현
+    // public Image uploadUserProfile(MultipartFile file, ImageTarget target) {
+    //     validateFile(file);
+	//
+    //     String originalFileName = file.getOriginalFilename();
+    //     File compressedFile = compressor.compressToWebp(originalFileName, file);
+	//
+    //     String storedFileName = generateFileName(compressedFile.getName());
+    //     String s3key = generateS3Key(storedFileName, target.name());
+    //     String s3Url = getS3Url(bucketName, s3key);
+	//
+    //     try {
+	// 		String s3Url = s3ImageClient.uploadUserProfileToS3(compressedFile, s3key);
+	//
+    //         Image image = Image.builder()
+    //                 .originalFileName(originalFileName)
+    //                 .storedFileName(storedFileName)
+    //                 .s3Url(s3Url)
+    //                 .s3Key(s3key)
+    //                 .originalFileSize(file.getSize())
+    //                 .originalContentType(file.getContentType())
+    //                 .compressedFileSize(compressedFile.length())
+    //                 .convertedContentType(Files.probeContentType(compressedFile.toPath()))
+    //                 .imageTarget(target)
+    //                 .build();
+	//
+    //         return imageRepository.save(image);
+    //     } catch (Exception e) {
+    //         log.error("이미지 저장 실패 error: {} ", e.getMessage());
+    //         throw new RuntimeException(e);
+    //     }
+    // }
 
 	@Override
 	public Image uploadUserProfile(MultipartFile file) {
@@ -178,32 +176,32 @@ public class ImageService implements AssetService<Image> {
 			.anyMatch(ext -> ext.trim().equalsIgnoreCase(extension));
 	}
 
-    /**
-     * 업로드 후 반환된 URL을 이용해 S3 객체를 삭제합니다.
-     */
-    public void deleteByUrl(String fileUrl) {
-        try {
-            // URL의 path 부분에서 "/" 제거 후 key 추출
-            URI uri = URI.create(fileUrl);
-            String path = uri.getPath();
-            String key = path.startsWith("/") ? path.substring(1) : path;
-
-            deleteByKey(key);
-        } catch (Exception e) {
-            log.error("Failed to delete S3 object from URL: {}", fileUrl, e);
-            throw new RuntimeException("S3 이미지 삭제 실패", e);
-        }
-    }
-
-    /**
-     * S3에 저장된 객체를 key로 삭제합니다.
-     */
-    public void deleteByKey(String key) {
-        s3Client.deleteObject(
-                DeleteObjectRequest.builder()
-                        .bucket(bucketName)
-                        .key(key)
-                        .build()
-        );
-    }
+    // /**
+    //  * 업로드 후 반환된 URL을 이용해 S3 객체를 삭제합니다.
+    //  */
+    // public void deleteByUrl(String fileUrl) {
+    //     try {
+    //         // URL의 path 부분에서 "/" 제거 후 key 추출
+    //         URI uri = URI.create(fileUrl);
+    //         String path = uri.getPath();
+    //         String key = path.startsWith("/") ? path.substring(1) : path;
+	//
+    //         deleteByKey(key);
+    //     } catch (Exception e) {
+    //         log.error("Failed to delete S3 object from URL: {}", fileUrl, e);
+    //         throw new RuntimeException("S3 이미지 삭제 실패", e);
+    //     }
+    // }
+	//
+    // /**
+    //  * S3에 저장된 객체를 key로 삭제합니다.
+    //  */
+    // public void deleteByKey(String key) {
+    //     s3Client.deleteObject(
+    //             DeleteObjectRequest.builder()
+    //                     .bucket(bucketName)
+    //                     .key(key)
+    //                     .build()
+    //     );
+    // }
 }

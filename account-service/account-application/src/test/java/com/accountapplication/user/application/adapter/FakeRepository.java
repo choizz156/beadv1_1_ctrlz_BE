@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.user.application.port.out.UserPersistencePort;
 import com.user.domain.model.User;
-import com.user.domain.vo.OAuthId;
+import com.auth.oauth2.OAuthId;
 import com.user.domain.vo.UserRole;
 
 public class FakeRepository implements UserPersistencePort {
@@ -65,7 +65,7 @@ public class FakeRepository implements UserPersistencePort {
 	}
 
 	@Override
-	public Optional<User> findByEmailAndOAuthId(String email, OAuthId oAuthId) {
+	public Optional<User> findByEmailAndOAuthId(String email, String oAuthId) {
 		return Optional.empty();
 	}
 
