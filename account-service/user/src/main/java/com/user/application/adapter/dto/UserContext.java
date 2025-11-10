@@ -1,9 +1,10 @@
-package com.userservice.application.adapter.dto;
+package com.user.application.adapter.dto;
 
 import lombok.Builder;
 
 @Builder
 public record UserContext(
+	String userId,
 	String email,
 	String nickname,
 	String name,
