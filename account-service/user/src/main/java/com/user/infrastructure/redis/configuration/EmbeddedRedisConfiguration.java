@@ -1,4 +1,4 @@
-package com.common.configuration;
+package com.user.infrastructure.redis.configuration;
 
 import java.io.BufferedReader;
 import java.io.IOException;
