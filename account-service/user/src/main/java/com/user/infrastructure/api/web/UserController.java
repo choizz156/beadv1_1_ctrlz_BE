@@ -1,4 +1,4 @@
-package com.userservice.infrastructure.api.web;
+package com.user.infrastructure.api.web;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.common.asset.image.infrastructure.ProfileImageUploadClient;
 import com.common.model.web.BaseResponse;
-import com.userservice.application.adapter.dto.UserContext;
-import com.userservice.application.port.in.UserCommandUseCase;
-import com.userservice.domain.model.User;
-import com.userservice.infrastructure.api.dto.UserCreateRequest;
-import com.userservice.infrastructure.api.dto.UserCreateResponse;
-import com.userservice.infrastructure.api.mapper.UserContextMapper;
-import com.userservice.infrastructure.reader.port.UserReaderPort;
-import com.userservice.infrastructure.reader.port.dto.UserDescription;
+import com.user.application.adapter.dto.UserContext;
+import com.user.application.port.in.UserCommandUseCase;
+import com.user.infrastructure.api.dto.UserCreateRequest;
+import com.user.infrastructure.api.dto.UserCreateResponse;
+import com.user.infrastructure.api.mapper.UserContextMapper;
+import com.user.infrastructure.feign.ProfileImageClient;
+import com.user.infrastructure.feign.dto.ImageResponse;
+import com.user.infrastructure.reader.port.UserReaderPort;
+import com.user.infrastructure.reader.port.dto.UserDescription;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class UserController {
 
 	private final UserReaderPort userReaderPort;
 	private final UserCommandUseCase userCommandUseCase;
-	private final ProfileImageUploadClient profileImageUploadClient;
+	private final ProfileImageClient profileImageClient;
 
 	@PostMapping
 	public BaseResponse<UserCreateResponse> createUser(
@@ -45,13 +45,13 @@ public class UserController {
 			? new ImageResponse(defaultImageUrl, null)
 			: profileImageClient.uploadImage(profileImage);
 
-		UserContext context = UserContextMapper.toContext(request, imageUrl);
-		User user = userCommandUseCase.create(context);
+		UserContext context = UserContextMapper.toContext(request, imageResponse);
+		UserContext savedUserContext = userCommandUseCase.create(context);
 
 		return new BaseResponse<>(new UserCreateResponse(
-			user.getId(),
-			user.getProfileUrl(),
-			user.getNickname()
+			savedUserContext.userId(),
+			savedUserContext.profileImageUrl(),
+			savedUserContext.nickname()
 		),
 			"가입 완료");
 	}
