@@ -1,6 +1,5 @@
 package com.user.application.adapter;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +13,7 @@ import com.user.domain.model.User;
 import com.user.domain.vo.Address;
 import com.user.infrastructure.feign.CartClient;
 import com.user.infrastructure.feign.dto.CartCreateRequest;
+import com.user.infrastructure.feign.exception.FeignClientException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +36,7 @@ public class UserApplication implements UserCommandUseCase {
 		User user = generateUser(userContext);
 		User savedUser = userPersistencePort.save(user);
 
-		ResponseEntity<Void> response = cartClient.createCart(new CartCreateRequest(savedUser.getId()));
-
-		rollbackUserTransaction(response, savedUser);
+		requestCartCreate(savedUser);
 
 		return UserContext.builder()
 			.nickname(savedUser.getNickname())
@@ -139,10 +137,11 @@ public class UserApplication implements UserCommandUseCase {
 		}
 	}
 
-	private void rollbackUserTransaction(ResponseEntity<?> response, User savedUser) {
-		if (!response.getStatusCode().is2xxSuccessful()) {
-			userPersistencePort.delete(savedUser.getId());
-			throw new RuntimeException("카트 생성 실패");
+	private void requestCartCreate(User savedUser) {
+		try {
+			cartClient.createCart(new CartCreateRequest(savedUser.getId()));
+		} catch (Exception e) {
+			throw new FeignClientException(e.getMessage(), e);
 		}
 	}
 }
