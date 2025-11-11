@@ -15,3 +15,16 @@ spring:
               predicates:
                 - Path=/api/users
                 - Method=POST
+            - id: user-info-protected
+              uri: lb://ACCOUNT-SERVICE
+              predicates:
+                - Path=/api/users/**
+                - Method=GET,PATCH,DELETE
+              filters:
+                - name: AuthenticationFilter
+                  args:
+                    requiredRole: USER
+
+
+jwt:
+  secret: sdglekfbdkfpgodkdfnisdlfk30499393e9f0dlskdfd90ie99fndf
