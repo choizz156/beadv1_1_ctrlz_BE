@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.common.exception.CustomException;
 import com.common.model.web.BaseResponse;
 import com.domainservice.domain.cart.model.dto.CreateCartRequest;
 import com.domainservice.domain.cart.model.dto.response.CartItemResponse;
@@ -85,6 +84,5 @@ public class CartController {
 	@PostMapping
 	public void createCart(@RequestBody CreateCartRequest request) {
 		cartService.addCart(request.userId());
-		throw new CustomException("테스트");
 	}
 }
