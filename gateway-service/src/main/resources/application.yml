@@ -5,6 +5,11 @@ spring:
   application:
     name: gateway-service
 
+  profiles:
+    group:
+      local:
+        - secret
+
   cloud:
     gateway:
       server:
