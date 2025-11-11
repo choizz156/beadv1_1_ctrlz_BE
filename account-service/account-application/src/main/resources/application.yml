@@ -78,8 +78,7 @@ custom:
 logging:
   level:
     io.awspring.cloud: DEBUG
-    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
-    org.springframework.web.servlet.DispatcherServlet: DEBUG
+
 
 
 
