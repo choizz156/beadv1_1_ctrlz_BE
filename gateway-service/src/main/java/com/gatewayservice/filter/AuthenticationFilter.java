@@ -29,6 +29,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
+//TODO: 로그아웃 체크
 @Component
 @Slf4j
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
@@ -91,6 +92,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 			String userId = claims.getPayload().get("userId").toString();
 			ServerHttpRequest authorizedRequest = request.mutate()
 				.header("X-REQUEST-ID", userId)
+				.header("X-ROLE", list.toArray(String[]::new))
 				.build();
 
 			log.warn("AuthenticationFilter userId = {}", userId);
