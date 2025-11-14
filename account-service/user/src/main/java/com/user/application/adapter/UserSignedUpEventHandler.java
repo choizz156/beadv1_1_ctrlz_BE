@@ -2,6 +2,8 @@ package com.user.application.adapter;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -23,13 +25,13 @@ public class UserSignedUpEventHandler {
 	private final ExternalEventPersistentPort externalEventPersistentPort;
 	private final OutboundEventPublisher kafkaEventPublisher;
 
-
 	@TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
 	public void saveExternalEvent(UserSignedUpEvent event) {
 		log.info("UserSignedUpEvent: {}", event);
 		externalEventPersistentPort.save(event.userId(), event.eventType());
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	public void publishKafka(UserSignedUpEvent event) {
 		kafkaEventPublisher.publish(cartCommandTopic, event);
