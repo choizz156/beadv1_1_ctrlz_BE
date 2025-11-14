@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.accountapplication.user.infrastructure.kafka.TestKafkaConsumer;
@@ -17,6 +18,7 @@ import com.user.domain.vo.EventType;
 import com.user.infrastructure.kafka.producer.kafkaOutboundEventPublisher;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext
 @ActiveProfiles("test")
 @EmbeddedKafka(
 	kraft = true,
@@ -34,8 +36,6 @@ class kafkaOutboundEventPublisherTest {
 	@Value("${custom.cart.topic.command}")
 	private String cartTopicCommand;
 
-	@Value("${custom.deposit.topic.command}")
-	private String depositTopicCommand;
 
 	@BeforeEach
 	void setUp() {
