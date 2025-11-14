@@ -31,6 +31,7 @@ public class TestKafkaProducerConfiguration {
 		properties.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 15000);
 		properties.put(ProducerConfig.ACKS_CONFIG, "all");
 		properties.put("allow.auto.create.topics", false);
+		properties.put("admin.auto-create", false);
 
 		return new DefaultKafkaProducerFactory<>(properties);
 

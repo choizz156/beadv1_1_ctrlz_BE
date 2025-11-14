@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +33,7 @@ public class TestKafkaConsumerConfiguration {
 		properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
 		properties.put("allow.auto.create.topics", false);
 		properties.put("spring.json.trusted.packages", "*");
+		properties.put("admin.auto-create", false);
 
 		return new DefaultKafkaConsumerFactory<>(properties);
 
