@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.accountapplication.user.infrastructure.kafka.TestKafkaConsumer;
 import com.user.domain.event.UserSignedUpEvent;
 import com.user.domain.vo.EventType;
-import com.user.infrastructure.kafka.producer.KafkaProducer;
+import com.user.infrastructure.kafka.producer.KafkaPublisher;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -23,10 +23,10 @@ import com.user.infrastructure.kafka.producer.KafkaProducer;
 	partitions = 1,
 	ports = 9092
 )
-class KafkaProducerTest {
+class KafkaPublisherTest {
 
 	@Autowired
-	KafkaProducer testKafkaProducer;
+	KafkaPublisher testKafkaPublisher;
 
 	@Autowired
 	TestKafkaConsumer testKafkaConsumer;
@@ -49,7 +49,7 @@ class KafkaProducerTest {
 		UserSignedUpEvent event = new UserSignedUpEvent("test_id", EventType.CREATE);
 
 		//when
-		testKafkaProducer.send(cartTopicCommand, event);
+		testKafkaPublisher.send(cartTopicCommand, event);
 		Thread.sleep(1500);
 
 		//then

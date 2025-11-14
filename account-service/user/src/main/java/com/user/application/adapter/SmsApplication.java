@@ -46,15 +46,6 @@ public class SmsApplication implements SellerVerificationUseCase {
 		verificationBanCache = getCache(CacheType.VERIFICATION_BAN_ONE_DAY);
 	}
 
-	private Cache getCache(CacheType type) {
-		Cache cache = cacheManager.getCache(type.name());
-		if (cache == null) {
-			log.error("캐시 초기화 실패: {}", cacheManager.getCacheNames());
-			throw new IllegalStateException("캐싱이 초기화되지 않았습니다. type = " + type.name());
-		}
-		return cache;
-	}
-
 	@Override
 	public void requestVerificationCode(SellerVerificationContext context) {
 		validateNoActiveCode(context.getUserId());
@@ -154,5 +145,14 @@ public class SmsApplication implements SellerVerificationUseCase {
 			log.error("{} — userId: {}", e.getMessage(), key, e);
 			throw new CustomException(UserExceptionCode.CODE_EXCEPTION.getMessage());
 		}
+	}
+
+	private Cache getCache(CacheType type) {
+		Cache cache = cacheManager.getCache(type.name());
+		if (cache == null) {
+			log.error("캐시 초기화 실패: {}", cacheManager.getCacheNames());
+			throw new IllegalStateException("캐싱이 초기화되지 않았습니다. type = " + type.name());
+		}
+		return cache;
 	}
 }
