@@ -50,7 +50,6 @@ public class KafkaConfiguration {
 			.build();
 	}
 
-	// 공통 Consumer 설정
 	private Map<String, Object> commonConsumerConfig() {
 		Map<String, Object> props = new HashMap<>();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -69,7 +68,6 @@ public class KafkaConfiguration {
 		return props;
 	}
 
-	// Cart 전용 ConsumerFactory
 	@Bean
 	public ConsumerFactory<String, CartCreateCommand> cartConsumerFactory() {
 		Map<String, Object> props = commonConsumerConfig();
@@ -77,7 +75,6 @@ public class KafkaConfiguration {
 		return new DefaultKafkaConsumerFactory<>(props);
 	}
 
-	// Cart 전용 ListenerContainerFactory
 	@Bean
 	public ConcurrentKafkaListenerContainerFactory<String, CartCreateCommand> cartKafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, CartCreateCommand> factory = 
@@ -85,20 +82,4 @@ public class KafkaConfiguration {
 		factory.setConsumerFactory(cartConsumerFactory());
 		return factory;
 	}
-
-	// 나중에 다른 이벤트 추가 시 (예시)
-	// @Bean
-	// public ConsumerFactory<String, OrderCreatedEvent> orderConsumerFactory() {
-	//     Map<String, Object> props = commonConsumerConfig();
-	//     props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, OrderCreatedEvent.class.getName());
-	//     return new DefaultKafkaConsumerFactory<>(props);
-	// }
-	
-	// @Bean
-	// public ConcurrentKafkaListenerContainerFactory<String, OrderCreatedEvent> orderKafkaListenerContainerFactory() {
-	//     ConcurrentKafkaListenerContainerFactory<String, OrderCreatedEvent> factory = 
-	//         new ConcurrentKafkaListenerContainerFactory<>();
-	//     factory.setConsumerFactory(orderConsumerFactory());
-	//     return factory;
-	// }
 }
