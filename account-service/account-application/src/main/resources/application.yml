@@ -47,6 +47,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
       acks: all
+
       properties:
         delivery.timeout.ms: 120000
         linger.ms: 0
@@ -54,8 +55,8 @@ spring:
         enable.idempotence: true
         allow.auto.create.topics: false
 
-    admin:
-      auto-create: false # AdminClient 비활성화 (Kafka 토픽 자동 생성 안 쓰면 가능)
+
+
 
 custom:
   config:
@@ -65,6 +66,10 @@ custom:
   cart:
     topic:
       command: cart-command
+
+  deposit:
+    topic:
+      command: deposit-command
 
   image:
     allowed-extension: jpg,jpeg,png,webp
@@ -78,5 +83,12 @@ logging:
     io.awspring.cloud: DEBUG
 
 
+# k8s 설정
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://svc-discovery:8761/eureka/\
 
-
+    enabled: false
