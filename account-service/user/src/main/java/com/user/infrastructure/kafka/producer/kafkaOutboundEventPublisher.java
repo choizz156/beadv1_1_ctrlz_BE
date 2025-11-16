@@ -17,7 +17,13 @@ public class kafkaOutboundEventPublisher implements OutboundEventPublisher {
 
 	@Override
 	public <T> void publish(String topicName, T event) {
-		kafkaTemplate.send(topicName, event);
-		log.info("Sending message to {}", event);
+		kafkaTemplate.send(topicName, event).whenComplete((res, e) -> {
+			if (e != null) {
+				log.error("kafka cart 생성 이벤트 전송 실패 : {}", e.getMessage(), e);
+				return;
+			}
+			log.info("kafka cart 생성 이벤트 전송 완료 : {}", res.getRecordMetadata().offset());
+		});
+
 	}
 }
