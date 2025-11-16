@@ -16,18 +16,17 @@ spring:
     hibernate:
       ddl-auto: create
 
-  #  datasource:
-  #    driver-class-name: org.h2.Driver
-  #    username: sa
-  #    password:
-  #    url: jdbc:h2:mem:user-db
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: admin
-    password: 1234
-    url: jdbc:mysql://mysql-service:3306/test_db
-
-
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    url: jdbc:h2:mem:user-db
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    username: admin
+  #    password: 1234
+  #    url: jdbc:mysql://mysql-service:3306/test_db
+  #
 
   h2:
     console:
@@ -62,6 +61,9 @@ spring:
         enable.idempotence: true
         allow.auto.create.topics: false
 
+    admin:
+      auto-create: false # AdminClient 비활성화 (Kafka 토픽 자동 생성 안 쓰면 가능)
+
 custom:
   config:
     topic-partitions: 1
@@ -70,10 +72,6 @@ custom:
   cart:
     topic:
       command: cart-command
-
-  deposit:
-    topic:
-      command: deposit-command
 
   image:
     allowed-extension: jpg,jpeg,png,webp

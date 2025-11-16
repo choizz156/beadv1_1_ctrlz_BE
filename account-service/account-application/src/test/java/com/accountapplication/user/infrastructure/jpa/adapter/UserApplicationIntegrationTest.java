@@ -14,7 +14,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.user.application.adapter.CartCreateCommand;
+import com.user.application.adapter.dto.CartCreateCommand;
 import com.user.application.adapter.UserApplication;
 import com.user.application.adapter.dto.UserContext;
 import com.user.application.port.out.ExternalEventPersistentPort;

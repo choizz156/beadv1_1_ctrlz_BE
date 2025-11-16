@@ -48,14 +48,14 @@ public class UserApplication implements UserCommandUseCase {
 
 	@Override
 	public void updateForSeller(String id) {
-		userPersistencePort.updateRole(id, com.user.domain.vo.UserRole.SELLER);
+		userPersistencePort.updateRolesForSeller(id);
 	}
 
 	@Override
 	public void updateUser(String userId, UserUpdateContext updateContext) {
 		User user = userPersistencePort.findById(userId);
 
-		com.user.domain.vo.Address updatedAddress = com.user.domain.vo.Address.builder()
+		Address updatedAddress = Address.builder()
 			.state(updateContext.state())
 			.city(updateContext.city())
 			.street(updateContext.street())
@@ -94,7 +94,7 @@ public class UserApplication implements UserCommandUseCase {
 			.phoneNumber(userContext.phoneNumber())
 			.nickname(userContext.nickname())
 			.address(
-				com.user.domain.vo.Address.builder()
+				Address.builder()
 					.state(userContext.state())
 					.city(userContext.city())
 					.street(userContext.street())

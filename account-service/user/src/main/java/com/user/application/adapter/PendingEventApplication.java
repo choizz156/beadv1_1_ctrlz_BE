@@ -9,7 +9,7 @@ import com.user.application.port.in.PendingEventUseCase;
 import com.user.application.port.out.ExternalEventPersistentPort;
 import com.user.application.port.out.OutboundEventPublisher;
 import com.user.domain.event.UserSignedUpEvent;
-import com.user.infrastructure.scheduler.configuration.vo.PendingEventSpec;
+import com.user.infrastructure.scheduler.configuration.vo.PendingEvent;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,9 +23,9 @@ public class PendingEventApplication implements PendingEventUseCase {
 	private final OutboundEventPublisher outboundEventPublisher;
 	private final ExternalEventPersistentPort externalEventPersistentPort;
 
-		@Override
+	@Override
 	public void publishPendingEvents() {
-		List<PendingEventSpec> pendingEvents = externalEventPersistentPort.findPendingEvents();
+		List<PendingEvent> pendingEvents = externalEventPersistentPort.findPendingEvents();
 		pendingEvents.forEach(pendingEvent -> {
 				outboundEventPublisher.publish(
 					cartCommandTopic,

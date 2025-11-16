@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.user.application.adapter.CartCreateCommand;
+import com.user.application.adapter.dto.CartCreateCommand;
 import com.user.application.adapter.UserSignedUpEventHandler;
 import com.user.application.port.out.ExternalEventPersistentPort;
 import com.user.application.port.out.OutboundEventPublisher;

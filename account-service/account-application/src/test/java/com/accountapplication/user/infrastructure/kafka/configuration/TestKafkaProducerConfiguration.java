@@ -1,4 +1,4 @@
-package com.accountapplication.user.infrastructure.kafka.config;
+package com.accountapplication.user.infrastructure.kafka.configuration;
 
 import java.util.HashMap;
 import java.util.Map;

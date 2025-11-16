@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import com.user.application.adapter.dto.CartCreateCommand;
 import com.user.application.port.out.ExternalEventPersistentPort;
 import com.user.application.port.out.OutboundEventPublisher;
 import com.user.domain.event.UserSignedUpEvent;
