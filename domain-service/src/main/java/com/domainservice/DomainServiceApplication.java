@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = {"com.domainservice", "com.common"})
 @EnableFeignClients(
-	basePackages = {"com.domainservice.common.feign.client"}
+	// basePackages = {"com.domainservice.common.feign.client","com.domainservice.common.configuration.feignclient"}
 )
 public class DomainServiceApplication {
 

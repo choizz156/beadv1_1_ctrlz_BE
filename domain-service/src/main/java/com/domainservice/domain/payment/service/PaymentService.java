@@ -2,7 +2,6 @@ package com.domainservice.domain.payment.service;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Base64;
@@ -48,7 +47,7 @@ public class PaymentService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Value("${payment.toss.test_secret_api_key}")
+    @Value("${payment.toss.test_secrete_api_key}")
     private String secretApiKey;
 
     @Transactional
