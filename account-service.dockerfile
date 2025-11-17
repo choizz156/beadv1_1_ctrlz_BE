@@ -25,5 +25,4 @@ WORKDIR /app
 
 COPY --from=build /app/account-service/account-application/build/libs/account-application-boot.jar app.jar
 
-#변경 예정
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=local" ,"app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod,secret" ,"app.jar"]

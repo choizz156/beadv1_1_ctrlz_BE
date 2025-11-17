@@ -18,5 +18,5 @@ WORKDIR /app
 
 COPY --from=build /app/discovery-service/build/libs/*.jar app.jar
 
-# 변경 예정
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=local", "app.jar"]
+
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "app.jar"]
