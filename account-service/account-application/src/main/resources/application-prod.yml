@@ -10,7 +10,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: create # 수정 필요
     show-sql: false
     properties:
       hibernate:
@@ -18,24 +18,27 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: admin
-    password: 1234
+    #    username: admin
+    #    password: 1234
+    username: "${DB_USERNAME}"
+    password: "${DB_PASSWORD}"
+#    url: jdbc:mysql://mysql-service:3306/test_db
     url: jdbc:mysql://mysql-service:3306/test_db
 
   data:
     redis:
       host: redis-service
-      port: 6379
-      password: 1234
+#      port: 6379
+#      password: 1234
       timeout: 3000ms
       lettuce:
         pool:
           max-active: 8
           max-idle: 8
           min-idle: 0
+      password: "${REDIS_PASSWORD}"
 
   kafka:
-
     bootstrap-servers:
       - kafka-mq:9090
 
