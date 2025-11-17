@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elk-config-map
+
+data:
+  # Elasticsearch 설정
+  ES_NODE_NAME: "es01"
+  ES_CLUSTER_NAME: "cluster-exp"
+  ES_DISCOVERY_TYPE: "single-node"
+  ES_XPACK_SECURITY_ENABLED: "false"
+  ES_XPACK_SECURITY_HTTP_SSL_ENABLED: "false"
+  ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+  
+  # Logstash 설정
+  MYSQL_DATABASE: "test_db"
+  MYSQL_USER: "admin"
+  MYSQL_PASSWORD: "1234"
+  
+  # Kibana 설정
+  ELASTICSEARCH_HOSTS: "http://elasticsearch-service:9200"
