@@ -10,6 +10,7 @@ COPY gateway-service/src ./gateway-service/src
 
 WORKDIR /app/gateway-service
 RUN chmod +x ./gradlew
+RUN ./gradlew dependencies --no-daemon
 RUN ./gradlew clean build -x test --parallel --no-daemon
 
 FROM gcr.io/distroless/java21-debian12

@@ -23,6 +23,7 @@ spec:
           image: eddie1031/ls:9.1.3
           ports:
             - containerPort: 5044
+
           envFrom:
             - configMapRef:
                 name: elk-config-map
@@ -32,7 +33,7 @@ spec:
       volumes:
         - name: logstash-pipeline
           configMap:
-            name: logstash-pipeline-config
+            name: logstash-pipeline-configmap
 
 ---
 apiVersion: v1

@@ -18,26 +18,26 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #    username: admin
-    #    password: 1234
-    username: "${DB_USERNAME}"
-    password: "${DB_PASSWORD}"
-#    url: jdbc:mysql://mysql-service:3306/test_db
+    username: admin
+    password: 1234
+    #    username: "${DB_USERNAME}"
+    #    password: "${DB_PASSWORD}"
+    #    url: jdbc:mysql://mysql-service:3306/test_db
     url: jdbc:mysql://mysql-service:3306/test_db
 
   data:
     redis:
       host: redis-service
-#      port: 6379
-#      password: 1234
+      port: 6379
+      #      password: 1234
       timeout: 3000ms
       lettuce:
         pool:
           max-active: 8
           max-idle: 8
           min-idle: 0
-      password: "${REDIS_PASSWORD}"
-
+      password: 1234
+  #      password: "${REDIS_PASSWORD}"
   kafka:
     bootstrap-servers:
       - kafka-mq:9090
@@ -84,3 +84,4 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://discovery-service:8761/eureka/
+    enabled: true

@@ -2,6 +2,7 @@ package com.domainservice.common.init.data;
 
 import java.math.BigDecimal;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.domainservice.domain.deposit.service.DepositService;
@@ -13,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-// @Profile({"local", "dev"})
+@Profile({"local", "dev"})
 public class DepositInitializer {
 
 	private final DepositService depositService;

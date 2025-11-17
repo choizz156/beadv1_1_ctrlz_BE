@@ -27,6 +27,7 @@ spring:
     show-sql: false
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
         default_batch_fetch_size: 100
 
   elasticsearch:
@@ -69,12 +70,15 @@ custom:
     topic:
       command: deposit-command
 
-payment:
-  toss:
-    test_client_api_key: test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm
-    test_secrete_api_key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
-    targetUrl: https://api.tosspayments.com/v1/payments
+  payment:
+    toss:
+      test_client_api_key: test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm
+      test_secrete_api_key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
+      targetUrl: https://api.tosspayments.com/v1/payments
 
+  feign:
+    url:
+      user-service: http://account-service:8080
 # k8s 설정
 eureka:
   instance:

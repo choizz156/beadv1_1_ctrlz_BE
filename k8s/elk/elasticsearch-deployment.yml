@@ -23,6 +23,15 @@ spec:
           image: eddie1031/es:9.1.3
           ports:
             - containerPort: 9200
+          env:
+            - name: xpack.security.enabled
+              value: "false"
+            - name: xpack.security.http.ssl.enabled
+              value: "false"
+            - name: discovery.type
+              value: "single-node"
+            - name: ES_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
           envFrom:
             - configMapRef:
                 name: elk-config-map
@@ -31,7 +40,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: elasticsearch-service
+  name: elastic-search-service
 
 spec:
   type: NodePort
