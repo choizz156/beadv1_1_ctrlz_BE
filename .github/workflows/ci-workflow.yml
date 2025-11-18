@@ -8,6 +8,7 @@ on:
 jobs:
   code-test:
     name: 코드 테스트
+    runs-on: ubuntu-latest
 
     steps:
       - name: 브랜치로 체크아웃
