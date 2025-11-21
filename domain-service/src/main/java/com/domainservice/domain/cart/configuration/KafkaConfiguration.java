@@ -77,7 +77,7 @@ public class KafkaConfiguration {
 		factory.setConsumerFactory(cartConsumerFactory());
 
 		DefaultErrorHandler errorHandler = new DefaultErrorHandler(
-			new FixedBackOff(0L, 0)
+			new FixedBackOff(1000L, 1)
 		);
 
 		factory.setCommonErrorHandler(errorHandler);
