@@ -48,9 +48,4 @@ public class PaymentLogEntity extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDateTime loggedAt;
-
-    @Override
-    protected String getEntitySuffix() {
-        return "payment_logs";
-    }
 }

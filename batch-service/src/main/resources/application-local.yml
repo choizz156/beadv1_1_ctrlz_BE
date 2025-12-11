@@ -51,3 +51,7 @@ batch:
 logging:
   config: classpath:logback-local.xml
 
+custom:
+  feign:
+    url:
+      payment-service: http://localhost:8084

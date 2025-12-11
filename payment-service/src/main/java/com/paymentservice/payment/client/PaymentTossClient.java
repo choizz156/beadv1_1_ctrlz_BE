@@ -38,16 +38,14 @@ public class PaymentTossClient {
 
         // Toss로 보내야하는 필수 필드
         Map<String, Object> requestBody = Map.of(
-            "paymentKey", request.paymentKey(),
-            "orderId", request.orderId(),
-            "amount", request.totalAmount()
-        );
+                "paymentKey", request.paymentKey(),
+                "orderId", request.orderId(),
+                "amount", request.totalAmount());
 
         Map<String, Object> responseMap = paymentFeignClient.requestPayment(
-            requestBody, authHeader()
-        );
+                requestBody, authHeader());
 
-        String responseStatus = (String)responseMap.get("status");
+        String responseStatus = (String) responseMap.get("status");
         PaymentStatus paymentStatus;
         // Toss 응답 상태가 DONE이 아닌 경우는 실패
         if (Objects.equals("DONE", responseStatus)) {
@@ -67,33 +65,29 @@ public class PaymentTossClient {
             }
         }
         return new TossApprovalResponse(
-            request.orderId(),
-            request.amount(),
-            request.usedDepositAmount(),
-            request.totalAmount(),
-            (String)responseMap.get("currency"),
-            null,
-            paymentStatus,
-            (String)responseMap.get("paymentKey"),
-            approvedAt
-            );
+                request.orderId(),
+                request.amount(),
+                request.usedDepositAmount(),
+                request.totalAmount(),
+                (String) responseMap.get("currency"),
+                null,
+                paymentStatus,
+                (String) responseMap.get("paymentKey"),
+                approvedAt);
     }
-
 
     // 환불
     public RefundResponse refund(PaymentEntity payment) {
 
         // Toss로 보내야하는 필수 필드
         Map<String, Object> cancelBody = Map.of(
-            "cancelAmount", payment.getTossChargedAmount(),
-            "cancelReason", "사용자 요청 환불"
-        );
+                "cancelAmount", payment.getTossChargedAmount(),
+                "cancelReason", "사용자 요청 환불");
 
-        RefundResponse  response = paymentFeignClient.refundPayment(
-            payment.getPaymentKey(),
-            cancelBody,
-            authHeader()
-        );
+        RefundResponse response = paymentFeignClient.refundPayment(
+                payment.getPaymentKey(),
+                cancelBody,
+                authHeader());
 
         // Toss 환불 실패 시 바로 Exception
         if (!Objects.equals("CANCELED", response.status())) {
@@ -103,11 +97,10 @@ public class PaymentTossClient {
         return response;
     }
 
-
     private String authHeader() {
         String key = (secretApiKey != null) ? secretApiKey : "test_secret_key";
         return "Basic " + Base64.getEncoder()
-            .encodeToString((key + ":").getBytes(StandardCharsets.UTF_8));
+                .encodeToString((key + ":").getBytes(StandardCharsets.UTF_8));
 
     }
 }
