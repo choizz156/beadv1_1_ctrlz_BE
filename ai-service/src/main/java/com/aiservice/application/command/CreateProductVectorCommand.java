@@ -3,15 +3,13 @@ package com.aiservice.application.command;
 import java.util.List;
 
 public record CreateProductVectorCommand(
-	String productId,
-	String title,
-	String name,
-	String categoryName,
-	String status,
-	int price,
-	String description,
-	List<String> tags
-) {
+		String productId,
+		String title,
+		String categoryName,
+		String status,
+		int price,
+		String description,
+		List<String> tags) {
 
 	public CreateProductVectorCommand {
 
@@ -20,7 +18,6 @@ public record CreateProductVectorCommand(
 		}
 
 		title = defaultIfNull(title);
-		name = defaultIfNull(name);
 		categoryName = defaultIfNull(categoryName);
 		status = defaultIfNull(status);
 		description = defaultIfNull(description);

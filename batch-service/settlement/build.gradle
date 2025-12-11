@@ -20,14 +20,16 @@ dependencies {
     // h2
     runtimeOnly 'com.h2database:h2'
 
-    // Spring Kafka
-    implementation 'org.springframework.kafka:spring-kafka'
-    // JSON 직렬화/역직렬화용
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 
 
-jar {
-    enabled = true
+tasks.named('test') {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
 }

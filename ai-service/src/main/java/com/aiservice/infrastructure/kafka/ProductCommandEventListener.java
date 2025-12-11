@@ -29,14 +29,13 @@ public class ProductCommandEventListener {
 		try {
 
 			CreateProductVectorCommand command = new CreateProductVectorCommand(
-				event.id(),
-				event.title(),
-				event.name(),
-				event.categoryName(),
-				event.status(),
-				event.price().intValue(),
-				event.description(),
-				event.tags());
+					event.id(),
+					event.title(),
+					event.categoryName(),
+					event.status(),
+					event.price().intValue(),
+					event.description(),
+					event.tags());
 
 			String documentId = ragService.uploadData(command);
 			log.info("vector DB 저장 성공: {}", documentId);

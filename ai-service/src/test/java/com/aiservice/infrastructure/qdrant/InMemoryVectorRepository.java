@@ -104,9 +104,6 @@ public class InMemoryVectorRepository implements VectorRepository {
         if (data.title() != null && !data.title().isBlank()) {
             content.append("제품명: ").append(data.title()).append(". ");
         }
-        if (data.name() != null && !data.name().isBlank()) {
-            content.append("상품명: ").append(data.name()).append(". ");
-        }
         if (data.description() != null && !data.description().isBlank()) {
             content.append("설명: ").append(data.description()).append(". ");
         }

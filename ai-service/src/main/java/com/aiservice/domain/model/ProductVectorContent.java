@@ -8,7 +8,6 @@ import lombok.Builder;
 public record ProductVectorContent(
 		String productId,
 		String title,
-		String name,
 		String categoryName,
 		String status,
 		int price,

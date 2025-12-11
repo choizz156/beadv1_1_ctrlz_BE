@@ -18,7 +18,7 @@ public class RagCommandService implements RagService<CreateProductVectorCommand>
 
 	@Override
 	public String uploadData(CreateProductVectorCommand data) {
-		
+
 		vectorRepository.findDocumentByProductId(data.productId())
 				.ifPresent(doc -> {
 					log.info("기존 상품 벡터 삭제: {}", data.productId());
@@ -28,7 +28,6 @@ public class RagCommandService implements RagService<CreateProductVectorCommand>
 		ProductVectorContent content = ProductVectorContent.builder()
 				.productId(data.productId())
 				.title(data.title())
-				.name(data.name())
 				.categoryName(data.categoryName())
 				.status(data.status())
 				.price(data.price())

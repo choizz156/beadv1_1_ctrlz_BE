@@ -38,7 +38,6 @@ public class QdrantVectorRepository implements VectorRepository {
 		metadata.put("categoryName", data.categoryName());
 		metadata.put("tags", data.tags().toArray(String[]::new));
 		metadata.put("price", data.price());
-		metadata.put("name", data.name());
 
 		Document document = new Document(content, metadata);
 
@@ -112,10 +111,7 @@ public class QdrantVectorRepository implements VectorRepository {
 		// 글 제목
 		String content = "제품명: " + data.title() + ". "
 
-		// 상품이름 (제목과 다른 경우만)
-				+ "상품명: " + data.name() + ". "
-
-				// 상세 설명
+		// 상세 설명
 				+ "설명: " + data.description() + ". "
 
 				// 카테고리

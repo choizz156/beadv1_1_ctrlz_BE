@@ -74,7 +74,6 @@ class RagCommandServiceTest {
             CreateProductVectorCommand command = new CreateProductVectorCommand(
                     "prod-123",
                     "아이폰 15 Pro",
-                    "iPhone 15 Pro",
                     "모바일",
                     "판매중",
                     1500000,
@@ -134,7 +133,7 @@ class RagCommandServiceTest {
         void test1() {
             // when & then
             assertThatThrownBy(() -> new CreateProductVectorCommand(
-                    null, "제목", "이름", "카테고리", "상태", 1000, "설명", List.of())).isInstanceOf(IllegalArgumentException.class)
+                    null, "제목", "카테고리", "상태", 1000, "설명", List.of())).isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("productId");
         }
 
@@ -143,7 +142,7 @@ class RagCommandServiceTest {
         void test2() {
             // when & then
             assertThatThrownBy(() -> new CreateProductVectorCommand(
-                    "", "제목", "이름", "카테고리", "상태", 1000, "설명", List.of())).isInstanceOf(IllegalArgumentException.class)
+                    "", "제목", "카테고리", "상태", 1000, "설명", List.of())).isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("productId");
         }
 
@@ -152,7 +151,7 @@ class RagCommandServiceTest {
         void test3() {
             // when & then
             assertThatThrownBy(() -> new CreateProductVectorCommand(
-                    "prod-1", "제목", "이름", "카테고리", "상태", 0, "설명", List.of()))
+                    "prod-1", "제목", "카테고리", "상태", 0, "설명", List.of()))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("price");
         }
@@ -162,11 +161,10 @@ class RagCommandServiceTest {
         void test4() {
             // when
             CreateProductVectorCommand command = new CreateProductVectorCommand(
-                    "prod-1", null, null, null, null, 1000, null, null);
+                    "prod-1", null, null, null, 1000, null, null);
 
             // then
             assertThat(command.title()).isEmpty();
-            assertThat(command.name()).isEmpty();
             assertThat(command.categoryName()).isEmpty();
             assertThat(command.status()).isEmpty();
             assertThat(command.description()).isEmpty();
@@ -177,7 +175,6 @@ class RagCommandServiceTest {
     private CreateProductVectorCommand createCommand(String productId, String title) {
         return new CreateProductVectorCommand(
                 productId,
-                title,
                 title,
                 "테스트",
                 "판매중",
