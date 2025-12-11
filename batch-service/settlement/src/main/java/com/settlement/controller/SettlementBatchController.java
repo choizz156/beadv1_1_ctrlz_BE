@@ -1,13 +1,14 @@
 package com.settlement.controller;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Qualifier;
-
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,27 +41,30 @@ public class SettlementBatchController {
      */
     @PostMapping("/manual")
     public ResponseEntity<String> runSettlementBatch(
-            @RequestParam String startDate,
-            @RequestParam String endDate) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
 
         try {
-            LocalDateTime startDateTime;
-            LocalDateTime endDateTime;
+            // 파라미터가 없으면 전월 1일 ~ 마지막날로 설정
+            if (startDate == null || endDate == null) {
+                YearMonth lastMonth = YearMonth.from(LocalDateTime.now().minusMonths(1));
+                startDate = lastMonth.atDay(1).atStartOfDay();
+                endDate = lastMonth.atEndOfMonth().atTime(23, 59, 59);
+            }
 
-            startDateTime = LocalDateTime.parse(startDate);
-            endDateTime = LocalDateTime.parse(endDate);
+            log.info("정산 배치 수동 실행 요청 - 정산 기간: {} ~ {}", startDate, endDate);
 
-            log.info("정산 배치 수동 실행 요청 - 정산 기간: {} ~ {}", startDateTime, endDateTime);
-
+            // JobParameters 생성
             JobParameters jobParameters = new JobParametersBuilder()
-                    .addString("startDate", startDateTime.toString())
-                    .addString("endDate", endDateTime.toString())
+                    .addString("startDate", startDate.toString())
+                    .addString("endDate", endDate.toString())
                     .addLong("timestamp", System.currentTimeMillis())
                     .toJobParameters();
 
             // 배치 실행
             jobLauncher.run(settlementJob, jobParameters);
-            String message = "정산 배치 실행 완료 - 정산 기간: %s ~ %s".formatted(startDateTime, endDateTime);
+
+            String message = String.format("정산 배치 실행 완료 - 정산 기간: %s ~ %s", startDate, endDate);
             log.info(message);
 
             return ResponseEntity.ok(message);
