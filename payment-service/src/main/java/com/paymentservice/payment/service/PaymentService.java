@@ -52,12 +52,11 @@ public class PaymentService {
         Deposit deposit = depositService.getDepositBalance(userId);
 
         return new PaymentReadyResponse(
-            userId,
-            orderId,
-            order.totalAmount(),
-            deposit.getBalance(),
-            order.orderName()
-        );
+                userId,
+                orderId,
+                order.totalAmount(),
+                deposit.getBalance(),
+                order.orderName());
     }
 
     // deposit으로만 결제 할 경우
@@ -70,8 +69,7 @@ public class PaymentService {
             throw new InvalidOrderAmountException();
         }
         paymentLogService.logRequest(
-            userId, request.orderId(), request.paymentKey(), request
-        );
+                userId, request.orderId(), request.paymentKey(), request);
 
         return processDepositPayment(request, userId, order);
     }
@@ -85,30 +83,27 @@ public class PaymentService {
             depositService.useDeposit(userId, request.usedDepositAmount());
 
             PaymentEntity paymentEntity = PaymentEntity.of(
-                userId,
-                order.orderId(),
-                order.totalAmount(),
-                request.amount(),
-                BigDecimal.ZERO,
-                "KRW",
-                PayType.DEPOSIT,
-                PaymentStatus.SUCCESS,
-                null,
-                OffsetDateTime.now()
-            );
+                    userId,
+                    order.orderId(),
+                    order.totalAmount(),
+                    request.amount(),
+                    BigDecimal.ZERO,
+                    "KRW",
+                    PayType.DEPOSIT,
+                    PaymentStatus.SUCCESS,
+                    null,
+                    OffsetDateTime.now());
             paymentRepository.save(paymentEntity);
 
             // TODO: 비동기 주문 상태 변경 이벤트 발행
 
             paymentLogService.logSuccess(
-                request.orderId(), userId, null, request, paymentEntity
-            );
+                    request.orderId(), userId, null, request, paymentEntity);
 
             return PaymentResponse.from(paymentEntity);
         } catch (Exception e) {
             paymentLogService.logFail(
-                request.orderId(), userId, null, e.getMessage(), request
-            );
+                    request.orderId(), userId, null, e.getMessage(), request);
             throw new PaymentFailedException();
         }
     }
@@ -125,8 +120,7 @@ public class PaymentService {
         }
 
         paymentLogService.logRequest(
-            userId, request.orderId(), request.paymentKey(), request
-        );
+                userId, request.orderId(), request.paymentKey(), request);
 
         return processTossPayment(request, userId, deposit);
     }
@@ -135,11 +129,11 @@ public class PaymentService {
     @Transactional
     public PaymentEntity completePayment(TossApprovalResponse approve, String userId, Deposit deposit) {
 
-        BigDecimal usedDepositAmount = approve.depositUsedAmount();     // deposit 사용 금액
+        BigDecimal usedDepositAmount = approve.depositUsedAmount(); // deposit 사용 금액
         PayType payType;
 
         if (deposit.getBalance().compareTo(BigDecimal.ZERO) > 0
-            && usedDepositAmount.compareTo(BigDecimal.ZERO) > 0) {
+                && usedDepositAmount.compareTo(BigDecimal.ZERO) > 0) {
             // 예치금 차감
             depositService.useDeposit(userId, usedDepositAmount);
             payType = PayType.DEPOSIT_TOSS;
@@ -148,17 +142,16 @@ public class PaymentService {
         }
 
         PaymentEntity paymentEntity = PaymentEntity.of(
-            userId,
-            approve.orderId(),
-            approve.amount(),
-            approve.depositUsedAmount(),
-            approve.tossChargedAmount(),
-            approve.currency(),
-            payType,
-            approve.paymentStatus(),
-            approve.paymentKey(),
-            approve.approvedAt()
-        );
+                userId,
+                approve.orderId(),
+                approve.amount(),
+                approve.depositUsedAmount(),
+                approve.tossChargedAmount(),
+                approve.currency(),
+                payType,
+                approve.paymentStatus(),
+                approve.paymentKey(),
+                approve.approvedAt());
 
         // TODO: 비동기 주문 상태 변경 이벤트 발행
 
@@ -166,7 +159,7 @@ public class PaymentService {
     }
 
     public PaymentResponse processTossPayment(PaymentConfirmRequest request, String userId,
-        Deposit deposit) {
+            Deposit deposit) {
 
         try {
             // toss payments api
@@ -176,14 +169,12 @@ public class PaymentService {
             PaymentEntity paymentEntity = completePayment(approve, userId, deposit);
 
             paymentLogService.logSuccess(
-                request.orderId(), userId, request.paymentKey(), request, approve
-            );
+                    request.orderId(), userId, request.paymentKey(), request, approve);
 
             return PaymentResponse.from(paymentEntity);
         } catch (Exception e) {
             paymentLogService.logFail(
-                request.orderId(), userId, request.paymentKey(), e.getMessage(), request
-            );
+                    request.orderId(), userId, request.paymentKey(), e.getMessage(), request);
             throw new PaymentFailedException();
         }
     }
@@ -191,11 +182,10 @@ public class PaymentService {
     // 환불 처리
     public RefundResponse refundOrder(PaymentEntity payment, boolean includeDeposit, String userId) {
         paymentLogService.logRequest(
-            userId,
-            payment.getOrderId(),
-            payment.getPaymentKey(),
-            null
-        );
+                userId,
+                payment.getOrderId(),
+                payment.getPaymentKey(),
+                null);
 
         RefundResponse approvalResponse = null;
         RefundResponse response = null;
@@ -206,22 +196,20 @@ public class PaymentService {
             // 내부처리
             response = processRefundOrder(payment, approvalResponse, includeDeposit);
             paymentLogService.logSuccess(
-                payment.getOrderId(),
-                userId,
-                payment.getPaymentKey(),
-                approvalResponse,
-                response
-            );
+                    payment.getOrderId(),
+                    userId,
+                    payment.getPaymentKey(),
+                    approvalResponse,
+                    response);
             return response;
 
         } catch (Exception e) {
             paymentLogService.logFail(
-                payment.getOrderId(),
-                userId,
-                payment.getPaymentKey(),
-                e.getMessage(),
-                response
-            );
+                    payment.getOrderId(),
+                    userId,
+                    payment.getPaymentKey(),
+                    e.getMessage(),
+                    response);
             throw e;
         }
 
@@ -234,14 +222,13 @@ public class PaymentService {
         BigDecimal tossRefund = payment.getTossChargedAmount();
 
         PaymentRefundEntity refundEntity = PaymentRefundEntity.of(
-            payment.getPaymentKey(),
-            payment.getOrderId(),
-            depositRefund.add(tossRefund),
-            "사용자 요청 환불",
-            payment.getStatus(),
-            payment.getApprovedAt(),
-            response.canceledAt()
-        );
+                payment.getPaymentKey(),
+                payment.getOrderId(),
+                depositRefund.add(tossRefund),
+                "사용자 요청 환불",
+                payment.getStatus(),
+                payment.getApprovedAt(),
+                response.canceledAt());
         payment.linkRefund(refundEntity);
 
         // 예치금 환불
@@ -251,8 +238,27 @@ public class PaymentService {
 
         refundEntity.refundSuccess(payment.getOrderId(), OffsetDateTime.now());
 
-        //TODO: 주문상태 이벤트
+        // TODO: 주문상태 이벤트
 
         return RefundResponse.from(refundEntity);
+    }
+
+    // 정산용 결제 내역 조회 (Batch 호출)
+    @Transactional(readOnly = true)
+    public java.util.List<PaymentResponse> getPaymentsForSettlement(java.time.LocalDateTime startDate,
+            java.time.LocalDateTime endDate) {
+        // LocalDateTime -> OffsetDateTime (Asia/Seoul 기준)
+        java.time.ZoneId zoneId = java.time.ZoneId.of("Asia/Seoul");
+        java.time.ZoneOffset zoneOffset = zoneId.getRules().getOffset(java.time.LocalDateTime.now());
+
+        OffsetDateTime start = startDate.atOffset(zoneOffset);
+        OffsetDateTime end = endDate.atOffset(zoneOffset);
+
+        java.util.List<PaymentEntity> payments = paymentRepository.findByApprovedAtBetweenAndStatus(
+                start, end, PaymentStatus.SUCCESS);
+
+        return payments.stream()
+                .map(PaymentResponse::from)
+                .collect(java.util.stream.Collectors.toList());
     }
 }
