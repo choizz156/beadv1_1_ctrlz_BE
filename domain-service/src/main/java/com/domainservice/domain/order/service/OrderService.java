@@ -32,6 +32,7 @@ import com.domainservice.domain.post.kafka.handler.ProductPostEventProducer;
 import com.domainservice.domain.post.post.model.dto.response.ProductPostResponse;
 import com.domainservice.domain.post.post.service.ProductPostService;
 
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -62,18 +63,17 @@ public class OrderService {
 		}
 
 		Map<String, ProductPostResponse> productMap = cartItems.stream()
-			.collect(Collectors.toMap(
-				CartItem::getProductPostId,
-				item -> productPostService.getProductPostById(item.getProductPostId())
-			));
+				.collect(Collectors.toMap(
+						CartItem::getProductPostId,
+						item -> productPostService.getProductPostById(item.getProductPostId())));
 
 		String orderName = generateOrderName(cartItems, productMap);
 
 		Order order = Order.builder()
-			.buyerId(userId)
-			.orderName(orderName)
-			.orderStatus(OrderStatus.PAYMENT_PENDING)
-			.build();
+				.buyerId(userId)
+				.orderName(orderName)
+				.orderStatus(OrderStatus.PAYMENT_PENDING)
+				.build();
 
 		for (CartItem cartItem : cartItems) {
 			ProductPostResponse product = productMap.get(cartItem.getProductPostId());
@@ -84,10 +84,10 @@ public class OrderService {
 			productPostService.updateTradeStatusById(cartItem.getProductPostId(), TradeStatus.PROCESSING);
 
 			OrderItem orderItem = OrderItem.builder()
-				.productPostId(product.id())
-				.priceSnapshot(BigDecimal.valueOf(product.price()))
-				.orderItemStatus(OrderItemStatus.PAYMENT_PENDING)
-				.build();
+					.productPostId(product.id())
+					.priceSnapshot(BigDecimal.valueOf(product.price()))
+					.orderItemStatus(OrderItemStatus.PAYMENT_PENDING)
+					.build();
 
 			order.addOrderItem(orderItem);
 		}
@@ -109,7 +109,7 @@ public class OrderService {
 	 */
 	public OrderResponse cancelOrder(String orderId, String userId) {
 		Order order = orderJpaRepository.findById(orderId)
-			.orElseThrow(() -> new CustomException(OrderExceptionCode.ORDER_NOT_FOUND.getMessage()));
+				.orElseThrow(() -> new CustomException(OrderExceptionCode.ORDER_NOT_FOUND.getMessage()));
 
 		if (!order.getBuyerId().equals(userId)) {
 			throw new CustomException(OrderExceptionCode.ORDER_UNAUTHORIZED.getMessage());
@@ -145,16 +145,16 @@ public class OrderService {
 	 */
 	public OrderResponse cancelOrderItem(String orderId, String userId, String orderItemId) {
 		Order order = orderJpaRepository.findById(orderId)
-			.orElseThrow(() -> new CustomException(OrderExceptionCode.ORDER_NOT_FOUND.getMessage()));
+				.orElseThrow(() -> new CustomException(OrderExceptionCode.ORDER_NOT_FOUND.getMessage()));
 
 		if (!order.getBuyerId().equals(userId)) {
 			throw new CustomException(OrderExceptionCode.ORDER_UNAUTHORIZED.getMessage());
 		}
 
 		OrderItem targetItem = order.getOrderItems().stream()
-			.filter(item -> item.getId().equals(orderItemId))
-			.findFirst()
-			.orElseThrow(() -> new CustomException(OrderExceptionCode.ORDERITEM_NOT_FOUND.getMessage()));
+				.filter(item -> item.getId().equals(orderItemId))
+				.findFirst()
+				.orElseThrow(() -> new CustomException(OrderExceptionCode.ORDERITEM_NOT_FOUND.getMessage()));
 
 		switch (order.getOrderStatus()) {
 			case PAYMENT_PENDING:
@@ -171,8 +171,8 @@ public class OrderService {
 		}
 
 		boolean allCanceledOrRefunded = order.getOrderItems().stream()
-			.allMatch(item -> item.getOrderItemStatus() == OrderItemStatus.CANCELLED
-				|| item.getOrderItemStatus() == OrderItemStatus.REFUND_AFTER_PAYMENT);
+				.allMatch(item -> item.getOrderItemStatus() == OrderItemStatus.CANCELLED
+						|| item.getOrderItemStatus() == OrderItemStatus.REFUND_AFTER_PAYMENT);
 
 		// 모든 아이템이 취소/환불이면 주문 상태도 변경
 		if (allCanceledOrRefunded) {
@@ -204,7 +204,7 @@ public class OrderService {
 	 */
 	public OrderResponse confirmPurchase(String orderId, String userId) {
 		Order order = orderJpaRepository.findById(orderId)
-			.orElseThrow(() -> new CustomException(OrderExceptionCode.ORDER_NOT_FOUND.getMessage()));
+				.orElseThrow(() -> new CustomException(OrderExceptionCode.ORDER_NOT_FOUND.getMessage()));
 
 		if (!order.getBuyerId().equals(userId)) {
 			throw new CustomException(OrderExceptionCode.ORDER_UNAUTHORIZED.getMessage());
@@ -223,9 +223,8 @@ public class OrderService {
 				productPostService.updateTradeStatusById(item.getProductPostId(), TradeStatus.SOLDOUT);
 				// kafka 메시지 발행
 				settlementProducer.send(new SettlementCreatedEvent(item.getId(),
-					productPostService.getProductPostById(item.getProductPostId()).userId(),
-					item.getPriceSnapshot()
-				));
+						productPostService.getProductPostById(item.getProductPostId()).userId(),
+						item.getPriceSnapshot()));
 			}
 
 		}
@@ -245,8 +244,8 @@ public class OrderService {
 	private String generateOrderName(List<CartItem> cartItems, Map<String, ProductPostResponse> productMap) {
 		String firstItemName = productMap.get(cartItems.getFirst().getProductPostId()).title();
 		return (cartItems.size() == 1)
-			? firstItemName
-			: firstItemName + " 외 " + (cartItems.size() - 1) + "건";
+				? firstItemName
+				: firstItemName + " 외 " + (cartItems.size() - 1) + "건";
 	}
 
 	/**
@@ -254,34 +253,33 @@ public class OrderService {
 	 */
 	private OrderResponse toOrderResponse(Order order) {
 		return new OrderResponse(
-			order.getOrderName(),
-			order.getId(),
-			order.getBuyerId(),
-			order.getCreatedAt(),
-			order.getTotalAmount(),
-			order.getOrderStatus(),
-			order.getOrderItems().stream()
-				.filter(x -> x.getOrderItemStatus() != OrderItemStatus.CANCELLED
-					&& x.getOrderItemStatus() != OrderItemStatus.REFUND_AFTER_PAYMENT)
-				.map(x -> new OrderItemResponse(
-					x.getId(),
-					x.getPriceSnapshot(),
-					x.getOrderItemStatus()))
-				.toList()
-		);
+				order.getOrderName(),
+				order.getId(),
+				order.getBuyerId(),
+				order.getCreatedAt(),
+				order.getTotalAmount(),
+				order.getOrderStatus(),
+				order.getOrderItems().stream()
+						.filter(x -> x.getOrderItemStatus() != OrderItemStatus.CANCELLED
+								&& x.getOrderItemStatus() != OrderItemStatus.REFUND_AFTER_PAYMENT)
+						.map(x -> new OrderItemResponse(
+								x.getId(),
+								x.getPriceSnapshot(),
+								x.getOrderItemStatus()))
+						.toList());
 	}
 
 	private void publishProductPostUpdateEvents(Order order) {
 		order.getOrderItems().stream()
-			.map(OrderItem::getProductPostId)
-			.forEach(postId -> eventProducer.sendUpsertEventById(postId, EventType.UPDATE));
+				.map(OrderItem::getProductPostId)
+				.forEach(postId -> eventProducer.sendUpsertEventById(postId, EventType.UPDATE));
 	}
 
 	// 주문 상세 조회
 	@Transactional(readOnly = true)
 	public OrderResponse getOrderById(String orderId, String userId) {
 		Order order = orderJpaRepository.findById(orderId)
-			.orElseThrow(() -> new CustomException(OrderExceptionCode.ORDER_NOT_FOUND.getMessage()));
+				.orElseThrow(() -> new CustomException(OrderExceptionCode.ORDER_NOT_FOUND.getMessage()));
 
 		if (!Objects.equals(userId, order.getBuyerId())) {
 			throw new CustomException(OrderExceptionCode.ORDER_UNAUTHORIZED.getMessage());
@@ -295,12 +293,18 @@ public class OrderService {
 		Page<Order> orderList = orderJpaRepository.findByBuyerId(userId, pageable);
 
 		return new PageResponse<>(
-			orderList.getNumber(),
-			orderList.getTotalPages(),
-			orderList.getSize(),
-			orderList.hasNext(),
-			orderList.getContent().stream().map(this::toOrderResponse).toList()
-		);
+				orderList.getNumber(),
+				orderList.getTotalPages(),
+				orderList.getSize(),
+				orderList.hasNext(),
+				orderList.getContent().stream().map(this::toOrderResponse).toList());
 	}
 
+	// 정산용 주문 목록 조회
+	@Transactional(readOnly = true)
+	public List<OrderResponse> getOrdersForSettlement(LocalDateTime startDate, LocalDateTime endDate) {
+		return orderJpaRepository.findAllByCreatedAtBetween(startDate, endDate).stream()
+				.map(this::toOrderResponse)
+				.toList();
+	}
 }
