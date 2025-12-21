@@ -1,9 +1,7 @@
 package com.search.configuration;
 
-import com.search.dto.UserBehaviorDto;
-import com.search.listener.SearchBatchSkipListener;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.sql.DataSource;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -13,7 +11,9 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
+import org.springframework.batch.item.file.builder.MultiResourceItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +24,11 @@ import org.springframework.core.task.VirtualThreadTaskExecutor;
 import org.springframework.core.task.support.TaskExecutorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
+import com.search.dto.UserBehaviorDto;
+import com.search.listener.SearchBatchSkipListener;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 검색 이력 배치 작업 설정
@@ -84,6 +88,7 @@ public class SearchBatchConfiguration {
 		return new StepBuilder("masterStep", jobRepository)
 			.partitioner("slaveStep", partitioner)
 			.step(slaveStep())
+			.gridSize(poolSize)
 			.taskExecutor(batchTaskExecutor())
 			.build();
 	}
@@ -109,24 +114,83 @@ public class SearchBatchConfiguration {
 	}
 
 	/**
-	 * 파티션별 파일을 처리하는 Reader
-	 * @param filePath StepExecutionContext에서 주입받는 파일 경로
+	 * 파티션별 여러 파일을 처리하는 MultiResourceItemReader
+	 * @param filePaths StepExecutionContext에서 주입받는 쉼표로 구분된 파일 경로들
 	 */
 	@Bean
 	@StepScope
-	public FlatFileItemReader<UserBehaviorDto> partitionedReader(
-		@Value("#{stepExecutionContext['filePath']}") String filePath) {
+	public MultiResourceItemReader<UserBehaviorDto> partitionedReader(
+		@Value("#{stepExecutionContext['filePaths']}") String filePaths) {
 
-		String behaviorType = determineBehaviorType(filePath);
-		SearchLogLineMapper lineMapper = new SearchLogLineMapper(behaviorType);
-		Resource resource = resourceProvider.createResource(filePath);
+		if (filePaths == null || filePaths.isEmpty()) {
+			log.warn("파티션에 할당된 파일이 없습니다.");
+			return createEmptyMultiReader();
+		}
 
-		log.info("파티션 Reader 초기화 - 파일: {}, 타입: {}", filePath, behaviorType);
+		// 쉼표로 구분된 파일 경로들을 배열로 변환
+		String[] filePathArray = filePaths.split(",");
+		Resource[] resources = new Resource[filePathArray.length];
 
-		return new FlatFileItemReaderBuilder<UserBehaviorDto>()
-			.name("partitionedReader")
-			.resource(resource)
-			.lineMapper(lineMapper)
+		log.info("파티션 Reader 초기화 - 할당된 파일 수: {}", filePathArray.length);
+
+		for (int i = 0; i < filePathArray.length; i++) {
+			String filePath = filePathArray[i].trim();
+			resources[i] = resourceProvider.createResource(filePath);
+			log.info("  [{}] {}", i + 1, filePath);
+		}
+
+		return new MultiResourceItemReaderBuilder<UserBehaviorDto>()
+			.name("partitionedMultiReader")
+			.resources(resources)
+			.delegate(createDynamicReader())
+			.build();
+	}
+
+	/**
+	 * 파일명에 따라 동적으로 LineMapper를 결정하는 Reader
+	 */
+	private FlatFileItemReader<UserBehaviorDto> createDynamicReader() {
+		return new FlatFileItemReader<UserBehaviorDto>() {
+			@Override
+			public void setResource(Resource resource) {
+				super.setResource(resource);
+				// 파일명으로 behaviorType 판단
+				String fileName = resource.getFilename();
+				String behaviorType = determineBehaviorTypeFromFileName(fileName);
+
+				log.info("Reader 설정 변경 - 파일: {}, 타입: {}", fileName, behaviorType);
+				this.setLineMapper(new SearchLogLineMapper(behaviorType));
+			}
+		};
+	}
+
+	/**
+	 * 파일명에서 동작 타입 결정
+	 */
+	private String determineBehaviorTypeFromFileName(String fileName) {
+		if (fileName == null) {
+			return "VIEW";
+		}
+		return fileName.contains("item-view") ? "VIEW" : "SEARCH";
+	}
+
+	/**
+	 * 빈 MultiResourceItemReader 생성 (파일이 없을 때)
+	 */
+	private MultiResourceItemReader<UserBehaviorDto> createEmptyMultiReader() {
+		Resource[] emptyResources = new Resource[] {
+			new org.springframework.core.io.ByteArrayResource(new byte[0])
+		};
+
+		FlatFileItemReader<UserBehaviorDto> emptyDelegate = new FlatFileItemReaderBuilder<UserBehaviorDto>()
+			.name("emptyReader")
+			.lineMapper(new SearchLogLineMapper("VIEW"))
+			.build();
+
+		return new MultiResourceItemReaderBuilder<UserBehaviorDto>()
+			.name("emptyMultiReader")
+			.resources(emptyResources)
+			.delegate(emptyDelegate)
 			.build();
 	}
 
@@ -137,12 +201,5 @@ public class SearchBatchConfiguration {
 			.sql(UPSERT_SQL)
 			.beanMapped()
 			.build();
-	}
-
-	/**
-	 * 파일 경로에서 동작 타입 결정
-	 */
-	private String determineBehaviorType(String filePath) {
-		return (filePath != null && filePath.contains("item-view")) ? "VIEW" : "SEARCH";
 	}
 }
