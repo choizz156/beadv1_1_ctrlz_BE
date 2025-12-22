@@ -56,7 +56,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto:
     show-sql: false
     properties:
       hibernate:
@@ -85,7 +85,7 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-    enabled: true
+    enabled: false
 
 custom:
   product-post:

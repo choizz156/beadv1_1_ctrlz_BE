@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 
 import com.common.event.productPost.ProductPostUpsertedEvent;
@@ -16,62 +15,65 @@ import com.domainservice.domain.search.model.entity.dto.response.ProductPostSear
 public class SearchMapper {
 
 	// Elasticsearch Document를 검색 응답 DTO로 변환
-	public static ProductPostSearchResponse toSearchResponse(ProductPostDocumentEntity document) {
+	public static ProductPostSearchResponse toSearchResponse(ProductPostDocumentEntity document, float score) {
 		return ProductPostSearchResponse.builder()
-			.id(document.getId())
-			.title(document.getTitle())
-			.price(document.getPrice())
-			.viewCount(document.getViewCount())
-			.likedCount(document.getLikedCount())
-			.tradeStatus(document.getTradeStatus())
-			.primaryImageUrl(document.getPrimaryImageUrl())
-			.updatedAt(document.getUpdatedAt())
-			.build();
+				.id(document.getId())
+				.name(document.getName())
+				.title(document.getTitle())
+				.description(document.getDescription())
+				.tags(document.getTags())
+				.categoryName(document.getCategoryName())
+				.price(document.getPrice())
+				.viewCount(document.getViewCount())
+				.likedCount(document.getLikedCount())
+				.tradeStatus(document.getTradeStatus())
+				.primaryImageUrl(document.getPrimaryImageUrl())
+				.updatedAt(document.getUpdatedAt())
+				.score(score)
+				.build();
 	}
 
 	public static List<ProductPostSearchResponse> toSearchResponseList(
-		SearchHits<ProductPostDocumentEntity> searchHits) {
+			SearchHits<ProductPostDocumentEntity> searchHits) {
 		return searchHits.getSearchHits()
-			.stream()
-			.map(SearchHit::getContent)
-			.map(SearchMapper::toSearchResponse)
-			.toList();
+				.stream()
+				.map(hit -> toSearchResponse(hit.getContent(), hit.getScore()))
+				.toList();
 	}
 
 	public static ProductPostDocumentEntity toDocumentEntity(ProductPostUpsertedEvent event) {
 		return ProductPostDocumentEntity.builder()
-			.id(event.id())
-			.userId(event.userId())
-			.name(event.name())
-			.title(event.title())
-			.price(event.price())
-			.categoryName(event.categoryName())
-			.description(event.description())
-			.tags(event.tags())
-			.likedCount(event.likedCount())
-			.viewCount(event.viewCount())
-			.status(event.status())
-			.tradeStatus(event.tradeStatus())
-			.deleteStatus(event.deleteStatus())
-			.primaryImageUrl(event.primaryImageUrl())
-			.createdAt(event.createdAt())
-			.updatedAt(event.updatedAt())
-			.build();
+				.id(event.id())
+				.userId(event.userId())
+				.name(event.name())
+				.title(event.title())
+				.price(event.price())
+				.categoryName(event.categoryName())
+				.description(event.description())
+				.tags(event.tags())
+				.likedCount(event.likedCount())
+				.viewCount(event.viewCount())
+				.status(event.status())
+				.tradeStatus(event.tradeStatus())
+				.deleteStatus(event.deleteStatus())
+				.primaryImageUrl(event.primaryImageUrl())
+				.createdAt(event.createdAt())
+				.updatedAt(event.updatedAt())
+				.build();
 	}
 
 	public static PageResponse<List<ProductPostSearchResponse>> toPageResponse(
-		SearchHits<ProductPostDocumentEntity> searchHits, Pageable pageable) {
+			SearchHits<ProductPostDocumentEntity> searchHits, Pageable pageable) {
 
 		long totalHits = searchHits.getTotalHits();
-		int totalPages = (int)Math.ceil((double)totalHits / pageable.getPageSize());
+		int totalPages = (int) Math.ceil((double) totalHits / pageable.getPageSize());
 
 		return new PageResponse<>(
-			pageable.getPageNumber(),
-			totalPages,
-			pageable.getPageSize(),
-			pageable.getPageNumber() < totalPages - 1,
-			SearchMapper.toSearchResponseList(searchHits)
-		);
+				pageable.getPageNumber(),
+				totalPages,
+				pageable.getPageSize(),
+				pageable.getPageNumber() < totalPages - 1,
+				SearchMapper.toSearchResponseList(searchHits));
 	}
 
 	// 태그 파싱 : 아이폰,중고 -> [아이폰, 중고]
@@ -81,8 +83,8 @@ public class SearchMapper {
 		}
 
 		return Arrays.stream(tags.split(","))
-			.map(String::trim)
-			.filter(s -> !s.isEmpty())
-			.toList();
+				.map(String::trim)
+				.filter(s -> !s.isEmpty())
+				.toList();
 	}
 }

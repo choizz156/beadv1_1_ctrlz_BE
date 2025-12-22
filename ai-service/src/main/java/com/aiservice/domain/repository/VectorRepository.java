@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.ai.document.Document;
 
+import com.aiservice.application.dto.SearchParams;
 import com.aiservice.controller.dto.DocumentSearchResponse;
 import com.aiservice.domain.model.ProductVectorContent;
 
@@ -13,7 +14,7 @@ public interface VectorRepository {
 
 	Optional<Document> findDocumentByProductId(String productId);
 
-	List<DocumentSearchResponse> similaritySearch(String query, int maxResults);
+	List<DocumentSearchResponse> similaritySearch(SearchParams searchParams, int maxResults);
 
 	void deleteDocument(String productId);
 }

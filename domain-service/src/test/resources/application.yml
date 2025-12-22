@@ -1,10 +1,22 @@
-#spring:
+spring:
+#  cloud:
+#    aws:
+#      region:
+#        static: ap-northeast-2
+#      credentials:
+#        access-key: dummy
+#        secret-key: dummy
+#      s3:
+#        enabled: true
+#  profiles:
+#    active: test
+#  application:
+#    name: domain-service-test
 #  datasource:
 #    url: jdbc:h2:mem:testdb;MODE=MySQL
 #    driver-class-name: org.h2.Driver
 #    username: sa
 #    password:
-
 #  jpa:
 #    hibernate:
 #      ddl-auto: create-drop
@@ -14,8 +26,47 @@
 #      hibernate:
 #        dialect: org.hibernate.dialect.H2Dialect
 #        default_batch_fetch_size: 100
+#  elasticsearch:
+#    uris: http://localhost:9200
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: test-group
 
-#custom:
-#  feign:
-#    url:
-#      user-service: http://localhost:8080
+
+custom:
+  bucket-name: dummy-bucket
+  image:
+    allowed-extension: jpg,jpeg,png,webp
+    max-size: 10485760 # 10mb
+    default: https://example.com/default.png
+  config:
+    topic-partitions: 1
+    topic-replications: 1
+  feign:
+    url:
+      user-service: http://localhost:8080
+  cart:
+    topic:
+      command: cart-command
+  deposit:
+    topic:
+      command: deposit-command
+  product-post:
+    topic:
+      event: product-post-events
+  order:
+    topic:
+      command: order-command
+  search:
+    topic:
+      event: search-word-events
+  port:
+    gateway: 8082
+#
+#server:
+#  port: 8081

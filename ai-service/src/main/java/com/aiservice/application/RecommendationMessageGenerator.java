@@ -38,7 +38,7 @@ public class RecommendationMessageGenerator {
 		}
 
 		String userContext = buildUserContext(userId);
-		String searchContext = "사용자가 '%s'라고 검색했습니다.".formatted(query);
+		String searchContext = "The user searched for '%s'.".formatted(query);
 		String productList = buildProductList(recommendations);
 
 		String finalPrompt = promptTemplate.render(Map.of(

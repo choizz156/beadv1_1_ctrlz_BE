@@ -1,10 +1,12 @@
 package com.aiservice.infrastructure.kafka;
 
+import org.springframework.context.annotation.Profile;
+
 import com.aiservice.application.ProductRecommendationService;
 import com.aiservice.domain.event.ProductPostSearchedEvent;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 
 
 /**
@@ -22,7 +24,7 @@ public class ProductSearchEventListener {
     public void handler(ProductPostSearchedEvent event) {
         log.info("ProductSearchEvent 수신 - 사용자: {}, 쿼리: {}", event.userId(), event.query());
         try {
-            productRecommendationService.recommendProductsByQuery(event.userId(), event.query());
+            // productRecommendationService.recommendProductsByQuery(event.userId(), event.query());
         } catch (Exception e) {
             log.error("ProductSearchEvent 처리 중 오류 발생", e);
         }

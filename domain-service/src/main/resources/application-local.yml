@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   logging:
     config: classpath:logback-local.xml

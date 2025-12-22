@@ -1,7 +1,5 @@
 package com.aiservice.application.command;
 
-import java.util.List;
-
 public record CreateProductVectorCommand(
 		String productId,
 		String title,
@@ -9,7 +7,7 @@ public record CreateProductVectorCommand(
 		String status,
 		int price,
 		String description,
-		List<String> tags) {
+		String tags) {
 
 	public CreateProductVectorCommand {
 
@@ -21,7 +19,7 @@ public record CreateProductVectorCommand(
 		categoryName = defaultIfNull(categoryName);
 		status = defaultIfNull(status);
 		description = defaultIfNull(description);
-		tags = (tags == null) ? List.of() : tags;
+		tags = (tags == null) ? "" : tags;
 		if (price == 0 || price < 0) {
 			throw new IllegalArgumentException("price는 음수 일 수 없습니다.");
 		}

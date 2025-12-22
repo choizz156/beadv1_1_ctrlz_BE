@@ -60,6 +60,8 @@ dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // elasticsearch
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'

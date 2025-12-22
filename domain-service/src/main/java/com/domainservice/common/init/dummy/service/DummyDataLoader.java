@@ -26,9 +26,9 @@ public class DummyDataLoader {
 	public List<String> loadLines(String resourcePath) {
 		List<String> lines = new ArrayList<>();
 		try (BufferedReader reader = new BufferedReader(
-			new InputStreamReader(
-				new ClassPathResource(resourcePath).getInputStream(),
-				StandardCharsets.UTF_8))) {
+				new InputStreamReader(
+						new ClassPathResource(resourcePath).getInputStream(),
+						StandardCharsets.UTF_8))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
@@ -48,9 +48,9 @@ public class DummyDataLoader {
 	public Map<String, List<String>> loadProductNames(String resourcePath) {
 		Map<String, List<String>> productMap = new HashMap<>();
 		try (BufferedReader reader = new BufferedReader(
-			new InputStreamReader(
-				new ClassPathResource(resourcePath).getInputStream(),
-				StandardCharsets.UTF_8))) {
+				new InputStreamReader(
+						new ClassPathResource(resourcePath).getInputStream(),
+						StandardCharsets.UTF_8))) {
 			String line;
 			boolean isFirstLine = true;
 			while ((line = reader.readLine()) != null) {
@@ -59,20 +59,54 @@ public class DummyDataLoader {
 					continue;
 				}
 				line = line.trim();
-				if (line.isEmpty() || line.startsWith("#")) continue;
+				if (line.isEmpty() || line.startsWith("#"))
+					continue;
 
 				String[] parts = line.split(",", 2);
 				if (parts.length == 2) {
 					String categoryName = parts[0].trim();
 					String productName = parts[1].trim();
 					productMap.computeIfAbsent(categoryName, k -> new ArrayList<>())
-						.add(productName);
+							.add(productName);
 				}
 			}
 		} catch (IOException e) {
 			log.error("CSV 파일 로드 실패: {}", resourcePath, e);
 		}
 		return productMap;
+	}
+
+	/**
+	 * CSV 파일을 읽어 ID별 카테고리명 맵으로 반환
+	 */
+	public Map<String, String> loadCategories(String resourcePath) {
+		Map<String, String> categoryMap = new HashMap<>();
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(
+						new ClassPathResource(resourcePath).getInputStream(),
+						StandardCharsets.UTF_8))) {
+			String line;
+			boolean isFirstLine = true;
+			while ((line = reader.readLine()) != null) {
+				if (isFirstLine) {
+					isFirstLine = false;
+					continue;
+				}
+				line = line.trim();
+				if (line.isEmpty() || line.startsWith("#"))
+					continue;
+
+				String[] parts = line.split(",", 2);
+				if (parts.length == 2) {
+					String id = parts[0].trim();
+					String name = parts[1].trim();
+					categoryMap.put(id, name);
+				}
+			}
+		} catch (IOException e) {
+			log.error("카테고리 CSV 로드 실패: {}", resourcePath, e);
+		}
+		return categoryMap;
 	}
 
 }

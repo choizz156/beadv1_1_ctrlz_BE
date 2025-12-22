@@ -3,10 +3,10 @@ package com.aiservice.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aiservice.application.RecommendService;
+import com.aiservice.application.dto.SearchParams;
 import com.aiservice.controller.dto.BaseResponse;
 import com.aiservice.docs.TriggerRecommendationApiDocs;
 import com.aiservice.domain.model.RecommendationResult;
@@ -27,11 +27,11 @@ public class RecommendationController {
 	@TriggerRecommendationApiDocs
 	@GetMapping
 	public BaseResponse<RecommendationResult> triggerRecommendation(
-			@RequestParam("query") String query,
+			 SearchParams searchParams,
 			@RequestHeader("X-REQUEST-ID") String userId) {
-		log.info("추천 생성 요청 (Command) - 사용자: {}, 쿼리: {}", userId, query);
+		log.info("추천 생성 요청 (Command) - 사용자: {}, 쿼리: {}", userId, searchParams.q());
 
-		RecommendationResult result = recommendService.recommendProductsByQuery(userId, query);
+		RecommendationResult result = recommendService.recommendProductsByQuery(userId, searchParams);
 
 		return new BaseResponse<>(result, "추천 생성 요청이 처리되었습니다.");
 	}
