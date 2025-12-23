@@ -1,5 +1,7 @@
 package com.domainservice.domain.cart.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
@@ -10,9 +12,7 @@ import com.common.event.CartCreateCommand;
 import com.common.exception.CustomException;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequiredArgsConstructor
 @KafkaListener(
 	topics = {"${custom.cart.topic.command}"},
@@ -20,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 )
 @Component
 public class CartCommandListener {
+
+	private static final Logger log = LoggerFactory.getLogger("API." +  CartCommandListener.class.getSimpleName());
 
 	private final CartService cartService;
 

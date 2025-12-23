@@ -21,6 +21,8 @@ import org.springframework.util.backoff.FixedBackOff;
 
 import com.common.event.CartCreateCommand;
 
+import io.micrometer.observation.ObservationRegistry;
+
 @Configuration
 public class KafkaCartConsumerConfiguration {
 
@@ -41,9 +43,9 @@ public class KafkaCartConsumerConfiguration {
 	@Bean
 	public NewTopic createCartsCommandTopic() {
 		return TopicBuilder.name(cartTopicCommand)
-			.partitions(topicPartitions)
-			.replicas(topicReplications)
-			.build();
+				.partitions(topicPartitions)
+				.replicas(topicReplications)
+				.build();
 	}
 
 	@Bean
@@ -54,19 +56,19 @@ public class KafkaCartConsumerConfiguration {
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, CartCreateCommand> cartKafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, CartCreateCommand> factory =
-			new ConcurrentKafkaListenerContainerFactory<>();
+	public ConcurrentKafkaListenerContainerFactory<String, CartCreateCommand> cartKafkaListenerContainerFactory(
+			ObservationRegistry observationRegistry) {
+		ConcurrentKafkaListenerContainerFactory<String, CartCreateCommand> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(cartConsumerFactory());
 
 		// acknowledge() 메서드를 호출한 즉시 커밋
 		factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
 
 		DefaultErrorHandler errorHandler = new DefaultErrorHandler(
-			new FixedBackOff(1000L, 1)
-		);
+				new FixedBackOff(1000L, 1));
 
 		// Micrometer Observation을 통한 트레이스 전파
+		factory.getContainerProperties().setObservationRegistry(observationRegistry);
 		factory.getContainerProperties().setObservationEnabled(true);
 
 		factory.setCommonErrorHandler(errorHandler);
