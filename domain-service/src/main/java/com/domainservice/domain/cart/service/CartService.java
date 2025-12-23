@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +21,14 @@ import com.domainservice.domain.post.post.model.dto.response.ProductPostResponse
 import com.domainservice.domain.post.post.service.ProductPostService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class CartService {
+
+	private static final Logger log = LoggerFactory.getLogger("API." +  CartService.class.getSimpleName());
+
 	private final CartJpaRepository cartJpaRepository;
 	private final CartItemJpaRepository cartItemJpaRepository;
 	private final ProductPostService productPostService;

@@ -4,6 +4,8 @@ import static org.springframework.transaction.annotation.Propagation.*;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,14 +23,15 @@ import com.paymentservice.deposit.repository.DepositJpaRepository;
 import com.paymentservice.deposit.repository.DepositLogJpaRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class DepositService {
-    private final DepositJpaRepository depositJpaRepository;
+
+	private static final Logger log = LoggerFactory.getLogger("API." +  DepositService.class.getSimpleName());
+
+	private final DepositJpaRepository depositJpaRepository;
     private final DepositLogJpaRepository depositLogJpaRepository;
 	private final DepositTossClient depositTossClient;
 

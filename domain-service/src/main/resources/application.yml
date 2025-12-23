@@ -20,7 +20,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto:
+      ddl-auto: create
     show-sql: false
     properties:
       hibernate:

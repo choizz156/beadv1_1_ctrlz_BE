@@ -19,6 +19,7 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.util.backoff.FixedBackOff;
 
+import io.micrometer.observation.ObservationRegistry;
 import com.common.event.DepositCreateCommand;
 
 @Configuration
@@ -41,9 +42,9 @@ public class KafkaDepositConsumerConfiguration {
 	@Bean
 	public NewTopic createDepositCommandTopic() {
 		return TopicBuilder.name(depositTopicCommand)
-			.partitions(topicPartitions)
-			.replicas(topicReplications)
-			.build();
+				.partitions(topicPartitions)
+				.replicas(topicReplications)
+				.build();
 	}
 
 	@Bean
@@ -54,19 +55,19 @@ public class KafkaDepositConsumerConfiguration {
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, DepositCreateCommand> depositKafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, DepositCreateCommand> factory =
-			new ConcurrentKafkaListenerContainerFactory<>();
+	public ConcurrentKafkaListenerContainerFactory<String, DepositCreateCommand> depositKafkaListenerContainerFactory(
+			ObservationRegistry observationRegistry) {
+		ConcurrentKafkaListenerContainerFactory<String, DepositCreateCommand> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(depositConsumerFactory());
 
 		// acknowledge() 메서드를 호출한 즉시 커밋
 		factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
 
 		DefaultErrorHandler errorHandler = new DefaultErrorHandler(
-			new FixedBackOff(1000L, 1)
-		);
+				new FixedBackOff(1000L, 1));
 
 		// Micrometer Observation을 통한 트레이스 전파
+		factory.getContainerProperties().setObservationRegistry(observationRegistry);
 		factory.getContainerProperties().setObservationEnabled(true);
 
 		factory.setCommonErrorHandler(errorHandler);

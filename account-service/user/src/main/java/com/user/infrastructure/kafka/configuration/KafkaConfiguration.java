@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
+import io.micrometer.observation.ObservationRegistry;
+
 /**
  * 실제 kafka는 운영 환경에서 동작합니다.
  * 로컬 실행 시 profile을 바꿀 수 있습니다.
@@ -14,9 +16,10 @@ public class KafkaConfiguration {
 
 	@Bean
 	public KafkaTemplate<String, Object> kafkaTemplate(
-		ProducerFactory<String, Object> producerFactory
-	) {
+			ProducerFactory<String, Object> producerFactory,
+			ObservationRegistry observationRegistry) {
 		KafkaTemplate<String, Object> kafkaTemplate = new KafkaTemplate<>(producerFactory);
+		kafkaTemplate.setObservationRegistry(observationRegistry);
 		kafkaTemplate.setObservationEnabled(true);
 		return kafkaTemplate;
 	}

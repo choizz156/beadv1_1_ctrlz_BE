@@ -1,5 +1,7 @@
 package com.paymentservice.deposit.service.consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,9 +14,7 @@ import com.common.exception.CustomException;
 import com.paymentservice.deposit.service.DepositService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequiredArgsConstructor
 @KafkaListener(
 	topics = {"${custom.deposit.topic.command}"},
@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 )
 @Component
 public class DepositCommandListener {
+	private static final Logger log = LoggerFactory.getLogger("API." +  DepositCommandListener.class.getSimpleName());
 
 	private final DepositService depositService;
 
