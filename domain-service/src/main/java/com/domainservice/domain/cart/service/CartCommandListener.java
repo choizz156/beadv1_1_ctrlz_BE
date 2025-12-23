@@ -8,31 +8,29 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import com.common.event.CartCreateCommand;
+import com.common.event.UserSignupCommand;
 import com.common.exception.CustomException;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@KafkaListener(
-	topics = {"${custom.cart.topic.command}"},
-	containerFactory = "cartKafkaListenerContainerFactory"
-)
+@KafkaListener(topics = {
+		"${custom.user-signup.topic.command}" }, containerFactory = "userSignupKafkaListenerContainerFactory")
 @Component
 public class CartCommandListener {
 
-	private static final Logger log = LoggerFactory.getLogger("API." +  CartCommandListener.class.getSimpleName());
+	private static final Logger log = LoggerFactory.getLogger("API." + CartCommandListener.class.getSimpleName());
 
 	private final CartService cartService;
 
 	@KafkaHandler
-	public void handler(@Payload CartCreateCommand cartCreateCommand, Acknowledgment ack) {
+	public void handler(@Payload UserSignupCommand userSignupCommand, Acknowledgment ack) {
 		try {
-			cartService.addCart(cartCreateCommand.userId());
-			log.info("Cart created for user: {}", cartCreateCommand.userId());
+			cartService.addCart(userSignupCommand.userId());
+			log.info("Cart created for user: {}", userSignupCommand.userId());
 			ack.acknowledge();
 		} catch (CustomException e) {
-			log.info("이미 처리된 이벤트입니다: {}", cartCreateCommand.userId());
+			log.info("이미 처리된 이벤트입니다: {}", userSignupCommand.userId());
 			ack.acknowledge();
 		} catch (Exception e) {
 			log.error("카프카 event handler error: {}", e.getMessage(), e);

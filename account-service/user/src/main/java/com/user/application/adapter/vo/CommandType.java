@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum CommandType {
-	CART_COMMAND("cart command userId : "),
-	DEPOSIT_COMMAND("deposit command userId : ");
+	USER_SIGNUP_COMMAND("user signup command userId : ");
 
 	private final String value;
 

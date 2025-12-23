@@ -59,9 +59,9 @@ custom:
     topic-partitions: 1
     topic-replications: 1
 
-  deposit:
+  user-signup:
     topic:
-      command: deposit-command
+      command: user-signup-command
 
   feign:
     url:

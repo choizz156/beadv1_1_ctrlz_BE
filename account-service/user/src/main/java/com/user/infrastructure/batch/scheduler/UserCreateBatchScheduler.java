@@ -14,28 +14,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CartCreateBatchScheduler {
+public class UserCreateBatchScheduler {
 
 	private final JobLauncher jobLauncher;
-	private final Job cartCreateJob;
+	private final Job userSignupRetryJob;
 
 	@Scheduled(cron = "0 */5 * * * *")
-	public void runCartCreateBatch() {
+	public void runUserSignupRetryBatch() {
 		try {
 			JobParameters jobParameters = new JobParametersBuilder()
-				.addLong("time", System.currentTimeMillis())
-				.toJobParameters();
+					.addLong("time", System.currentTimeMillis())
+					.toJobParameters();
 
-			JobExecution jobExecution = jobLauncher.run(cartCreateJob, jobParameters);
+			JobExecution jobExecution = jobLauncher.run(userSignupRetryJob, jobParameters);
 
 			if (jobExecution.getStatus().isUnsuccessful()) {
-				log.error("CartCreateBatch job failed with status: {}", jobExecution.getStatus());
+				log.error("UserSignupRetry batch job 실패: {}", jobExecution.getStatus());
 			}
 
-			log.info("CartCreateBatch job completed successfully");
+			log.info("UserSignupRetry batch job 완료");
 
 		} catch (Exception e) {
-			log.error("Error running CartCreateBatch job", e);
+			log.error("UserSignupRetry batch job 실행 중 에러", e);
 		}
 	}
 }

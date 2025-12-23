@@ -50,12 +50,9 @@ custom:
   feign:
     url:
       user-service: http://localhost:8080
-  cart:
+  user-signup:
     topic:
-      command: cart-command
-  deposit:
-    topic:
-      command: deposit-command
+      command: user-signup-command
   product-post:
     topic:
       event: product-post-events

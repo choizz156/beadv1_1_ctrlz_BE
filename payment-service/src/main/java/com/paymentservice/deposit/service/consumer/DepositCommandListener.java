@@ -9,34 +9,32 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import com.common.event.DepositCreateCommand;
+import com.common.event.UserSignupCommand;
 import com.common.exception.CustomException;
 import com.paymentservice.deposit.service.DepositService;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@KafkaListener(
-	topics = {"${custom.deposit.topic.command}"},
-	containerFactory = "depositKafkaListenerContainerFactory"
-)
+@KafkaListener(topics = {
+		"${custom.user-signup.topic.command}" }, containerFactory = "userSignupKafkaListenerContainerFactory")
 @Component
 public class DepositCommandListener {
-	private static final Logger log = LoggerFactory.getLogger("API." +  DepositCommandListener.class.getSimpleName());
+	private static final Logger log = LoggerFactory.getLogger("API." + DepositCommandListener.class.getSimpleName());
 
 	private final DepositService depositService;
 
 	@KafkaHandler
-	public void handler(@Payload DepositCreateCommand depositCreateCommand, Acknowledgment ack) {
+	public void handler(@Payload UserSignupCommand userSignupCommand, Acknowledgment ack) {
 		try {
-			depositService.createDeposit(depositCreateCommand.userId());
-			log.info("deposit created for user: {}", depositCreateCommand.userId());
+			depositService.createDeposit(userSignupCommand.userId());
+			log.info("deposit created for user: {}", userSignupCommand.userId());
 			ack.acknowledge();
 		} catch (CustomException e) {
-			log.warn("이미 처리된 이벤트입니다: {}", depositCreateCommand.userId());
+			log.warn("이미 처리된 이벤트입니다: {}", userSignupCommand.userId());
 			ack.acknowledge();
 		} catch (DataIntegrityViolationException e) {
-			log.info("이미 처리된 이벤트입니다: {}", depositCreateCommand.userId());
+			log.info("이미 처리된 이벤트입니다: {}", userSignupCommand.userId());
 			ack.acknowledge();
 		} catch (Exception e) {
 			log.error("카프카 event handler error: {}", e.getMessage(), e);

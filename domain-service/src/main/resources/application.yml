@@ -69,13 +69,9 @@ custom:
     topic-partitions: 1
     topic-replications: 1
 
-  cart:
+  user-signup:
     topic:
-      command: cart-command
-
-  deposit:
-    topic:
-      command: deposit-command
+      command: user-signup-command
 
   product-post:
     topic:

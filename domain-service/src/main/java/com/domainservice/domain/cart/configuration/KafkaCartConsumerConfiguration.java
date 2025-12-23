@@ -19,15 +19,15 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.util.backoff.FixedBackOff;
 
-import com.common.event.CartCreateCommand;
+import com.common.event.UserSignupCommand;
 
 import io.micrometer.observation.ObservationRegistry;
 
 @Configuration
 public class KafkaCartConsumerConfiguration {
 
-	@Value("${custom.cart.topic.command}")
-	private String cartTopicCommand;
+	@Value("${custom.user-signup.topic.command}")
+	private String userSignupTopicCommand;
 
 	@Value("${custom.config.topic-partitions}")
 	private int topicPartitions;
@@ -41,25 +41,25 @@ public class KafkaCartConsumerConfiguration {
 	private String groupId;
 
 	@Bean
-	public NewTopic createCartsCommandTopic() {
-		return TopicBuilder.name(cartTopicCommand)
+	public NewTopic createUserSignupCommandTopic() {
+		return TopicBuilder.name(userSignupTopicCommand)
 				.partitions(topicPartitions)
 				.replicas(topicReplications)
 				.build();
 	}
 
 	@Bean
-	public ConsumerFactory<String, CartCreateCommand> cartConsumerFactory() {
+	public ConsumerFactory<String, UserSignupCommand> userSignupConsumerFactory() {
 		Map<String, Object> props = commonConsumerConfig();
-		props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, CartCreateCommand.class.getName());
+		props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, UserSignupCommand.class.getName());
 		return new DefaultKafkaConsumerFactory<>(props);
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, CartCreateCommand> cartKafkaListenerContainerFactory(
+	public ConcurrentKafkaListenerContainerFactory<String, UserSignupCommand> userSignupKafkaListenerContainerFactory(
 			ObservationRegistry observationRegistry) {
-		ConcurrentKafkaListenerContainerFactory<String, CartCreateCommand> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(cartConsumerFactory());
+		ConcurrentKafkaListenerContainerFactory<String, UserSignupCommand> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(userSignupConsumerFactory());
 
 		// acknowledge() 메서드를 호출한 즉시 커밋
 		factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);

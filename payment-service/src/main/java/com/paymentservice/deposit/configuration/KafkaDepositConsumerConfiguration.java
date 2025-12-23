@@ -20,13 +20,13 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.util.backoff.FixedBackOff;
 
 import io.micrometer.observation.ObservationRegistry;
-import com.common.event.DepositCreateCommand;
+import com.common.event.UserSignupCommand;
 
 @Configuration
 public class KafkaDepositConsumerConfiguration {
 
-	@Value("${custom.deposit.topic.command}")
-	private String depositTopicCommand;
+	@Value("${custom.user-signup.topic.command}")
+	private String userSignupTopicCommand;
 
 	@Value("${custom.config.topic-partitions}")
 	private int topicPartitions;
@@ -40,25 +40,25 @@ public class KafkaDepositConsumerConfiguration {
 	private String groupId;
 
 	@Bean
-	public NewTopic createDepositCommandTopic() {
-		return TopicBuilder.name(depositTopicCommand)
+	public NewTopic createUserSignupCommandTopic() {
+		return TopicBuilder.name(userSignupTopicCommand)
 				.partitions(topicPartitions)
 				.replicas(topicReplications)
 				.build();
 	}
 
 	@Bean
-	public ConsumerFactory<String, DepositCreateCommand> depositConsumerFactory() {
+	public ConsumerFactory<String, UserSignupCommand> userSignupConsumerFactory() {
 		Map<String, Object> props = depositConsumerConfig();
-		props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, DepositCreateCommand.class.getName());
+		props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, UserSignupCommand.class.getName());
 		return new DefaultKafkaConsumerFactory<>(props);
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, DepositCreateCommand> depositKafkaListenerContainerFactory(
+	public ConcurrentKafkaListenerContainerFactory<String, UserSignupCommand> userSignupKafkaListenerContainerFactory(
 			ObservationRegistry observationRegistry) {
-		ConcurrentKafkaListenerContainerFactory<String, DepositCreateCommand> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(depositConsumerFactory());
+		ConcurrentKafkaListenerContainerFactory<String, UserSignupCommand> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(userSignupConsumerFactory());
 
 		// acknowledge() 메서드를 호출한 즉시 커밋
 		factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
