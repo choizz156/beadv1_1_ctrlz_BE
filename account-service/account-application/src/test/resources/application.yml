@@ -41,13 +41,12 @@ custom:
     topic-partitions: 1
     topic-replications: 1
 
-  cart:
+  user-signup:
     topic:
-      command: cart-command
+      command: user-signup-command
 
-  deposit:
-    topic:
-      command: deposit-command
+  feign:
+    domain-service: http://localhost:8081
 
   redirectUrl: http://localhost:8080
 

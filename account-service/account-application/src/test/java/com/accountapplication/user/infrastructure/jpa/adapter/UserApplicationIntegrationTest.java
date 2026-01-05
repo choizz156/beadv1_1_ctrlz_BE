@@ -14,14 +14,15 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.user.application.adapter.dto.CartCreateCommand;
+import com.common.event.UserSignupCommand;
 import com.user.application.adapter.UserApplication;
 import com.user.application.adapter.dto.UserContext;
+import com.user.application.adapter.vo.CommandType;
 import com.user.application.port.out.ExternalEventPersistentPort;
 import com.user.application.port.out.OutboundEventPublisher;
 import com.user.application.port.out.UserPersistencePort;
 import com.user.domain.model.User;
-import com.user.domain.vo.EventType;
+import com.user.application.adapter.vo.EventType;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -57,17 +58,17 @@ class UserApplicationIntegrationTest {
 		userApplication.create(newUserContext);
 
 		// then
-		//커밋되기전에 수행되지 않음.
-		verify(externalEventPersistentPort, never()).save(any(), any());
+		// 커밋되기전에 수행되지 않음.
+		verify(externalEventPersistentPort, never()).save(any(), any(), any());
 
 		transactionManager.commit(status);
-		//커밋 직전에 수행
-		verify(externalEventPersistentPort, times(1)).save(any(), any());
+		// 커밋 직전에 수행
+		verify(externalEventPersistentPort, times(1)).save(any(), any(), any());
 	}
 
 	@DisplayName("사용자 생성 시 트랜잭션 커밋 후에 이벤트가 정상적으로 발행 및 처리된다")
 	@Test
-	void test2() {
+	void test2() throws Exception {
 		// given
 		UserContext newUserContext = UserContext_생성();
 		String expectedUserId = "testId";
@@ -77,44 +78,46 @@ class UserApplicationIntegrationTest {
 		TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
 		userApplication.create(newUserContext);
 
-		//then
+		// then
 		verify(outboundEventPublisher, never())
-			.publish(any(String.class), any(CartCreateCommand.class));
+				.publish(any(String.class), any(UserSignupCommand.class));
 		verify(externalEventPersistentPort, never())
-			.completePublish(expectedUserId, EventType.CREATED);
+				.completePublish(expectedUserId, EventType.CREATED.name(), CommandType.USER_SIGNUP_COMMAND.name());
 
 		transactionManager.commit(status);
 
+		Thread.sleep(1000L);
+
 		verify(outboundEventPublisher, times(1))
-			.publish(any(String.class), any(CartCreateCommand.class));
+				.publish(any(String.class), any(UserSignupCommand.class));
 		verify(externalEventPersistentPort, times(1))
-			.completePublish(expectedUserId, EventType.CREATED);
+				.completePublish(expectedUserId, EventType.CREATED.name(), CommandType.USER_SIGNUP_COMMAND.name());
 	}
 
 	private UserContext UserContext_생성() {
 		return UserContext.builder()
-			.email("test3@example.com")
-			.password("password123")
-			.name("테스트유저3")
-			.phoneNumber("010-1111-2222")
-			.nickname("테스트닉네임3")
-			.state("서울특별시")
-			.city("강남구")
-			.street("테헤란로")
-			.zipCode("12345")
-			.addressDetails("103호")
-			.build();
+				.email("test3@example.com")
+				.password("password123")
+				.name("테스트유저3")
+				.phoneNumber("010-1111-2222")
+				.nickname("테스트닉네임3")
+				.state("서울특별시")
+				.city("강남구")
+				.street("테헤란로")
+				.zipCode("12345")
+				.addressDetails("103호")
+				.build();
 	}
 
 	private void mock_세팅(String expectedUserId) {
 		User savedUser = User.builder()
-			.id(expectedUserId)
-			.email("test2@example.com")
-			.password("password123")
-			.name("테스트유저2")
-			.phoneNumber("010-9876-5432")
-			.nickname("테스트닉네임2")
-			.build();
+				.id(expectedUserId)
+				.email("test2@example.com")
+				.password("password123")
+				.name("테스트유저2")
+				.phoneNumber("010-9876-5432")
+				.nickname("테스트닉네임2")
+				.build();
 
 		when(userPersistencePort.existsNickname(any())).thenReturn(false);
 		when(userPersistencePort.existsPhoneNumber(any())).thenReturn(false);

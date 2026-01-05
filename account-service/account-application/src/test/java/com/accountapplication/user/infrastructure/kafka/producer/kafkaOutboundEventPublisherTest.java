@@ -14,17 +14,13 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.accountapplication.user.infrastructure.kafka.TestKafkaConsumer;
 import com.user.domain.event.UserSignedUpEvent;
-import com.user.domain.vo.EventType;
+import com.user.application.adapter.vo.EventType;
 import com.user.infrastructure.kafka.producer.kafkaOutboundEventPublisher;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
 @ActiveProfiles("test")
-@EmbeddedKafka(
-	kraft = true,
-	partitions = 1,
-	ports = 9092
-)
+@EmbeddedKafka(kraft = true, partitions = 1, ports = 9092)
 class kafkaOutboundEventPublisherTest {
 
 	@Autowired
@@ -33,9 +29,8 @@ class kafkaOutboundEventPublisherTest {
 	@Autowired
 	TestKafkaConsumer testKafkaConsumer;
 
-	@Value("${custom.cart.topic.command}")
-	private String cartTopicCommand;
-
+	@Value("${custom.user-signup.topic.command}")
+	private String userSignupCommandTopic;
 
 	@BeforeEach
 	void setUp() {
@@ -45,14 +40,14 @@ class kafkaOutboundEventPublisherTest {
 	@DisplayName("kafka 카트 생성 이벤트를 발행할 수 있다.")
 	@Test
 	void test1() throws Exception {
-		//given
+		// given
 		UserSignedUpEvent event = new UserSignedUpEvent("test_id", EventType.CREATED);
 
-		//when
-		testKafkaOutboundEventPublisher.publish(cartTopicCommand, event);
+		// when
+		testKafkaOutboundEventPublisher.publish(userSignupCommandTopic, event);
 		Thread.sleep(1500);
 
-		//then
+		// then
 		assertThat(testKafkaConsumer.getTestStore().size()).isEqualTo(1);
 	}
 }

@@ -18,9 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ActiveProfiles("test")
 @Component
-@KafkaListener(
-	topics = {"${custom.cart.topic.command}"}
-)
+@KafkaListener(topics = { "${custom.user-signup.topic.command}" })
 public class TestKafkaConsumer {
 
 	private final List<Object> testStore = new ArrayList<>();
