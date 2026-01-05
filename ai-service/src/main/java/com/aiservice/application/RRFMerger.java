@@ -32,10 +32,10 @@ public class RRFMerger {
         Map<String, DocumentSearchResponse> docMap = new LinkedHashMap<>();
 
         // es 결과 점수 계산
-        for (int i = 0; i < esResults.size(); i++) {
-            ProductPostEsSearchResponse esDoc = esResults.get(i);
+        for (int rank = 0; rank < esResults.size(); rank++) {
+            ProductPostEsSearchResponse esDoc = esResults.get(rank);
             String productId = esDoc.id();
-            double score = esWeight * (1.0 / (k + i + 1)); // 가중치 적용
+            double score = esWeight * (1.0 / (k + rank + 1)); // 가중치 적용
             rrfScores.merge(productId, score, Double::sum);
 
             // ES 결과를 DocumentSearchResponse로 변환
@@ -45,13 +45,13 @@ public class RRFMerger {
         }
 
         // vector 결과 점수 계산
-        for (int i = 0; i < vectorResults.size(); i++) {
-            DocumentSearchResponse vectorDoc = vectorResults.get(i);
+        for (int rank = 0; rank < vectorResults.size(); rank++) {
+            DocumentSearchResponse vectorDoc = vectorResults.get(rank);
             String productId = (String) vectorDoc.metadata().get("productId");
             if (productId == null)
                 continue;
 
-            double score = vectorWeight * (1.0 / (k + i + 1)); // 가중치 적용
+            double score = vectorWeight * (1.0 / (k + rank + 1)); // 가중치 적용
             rrfScores.merge(productId, score, Double::sum);
 
             // vector 결과가 더 상세한 정보를 가질 수 있으므로 우선 사용
