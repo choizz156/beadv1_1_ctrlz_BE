@@ -2,9 +2,12 @@ package com.aiservice.application.configuration;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,19 +24,29 @@ public class ChatClientConfiguration {
 	@Bean
 	public PromptTemplate recommendationPromptTemplate() {
 		return new PromptTemplate(
-			new ClassPathResource("prompts/recommendation.st")
-		);
+				new ClassPathResource("prompts/recommendation.st"));
 	}
 
-	// @Profile("local || me")
-	// @Bean
-	// public ChatOptions chatOptions() {
-	// 	log.info("로컬 환경 openai embedding model 사용");
-	//
-	// 	return ChatOptions
-	// 		.builder()
-	// 		.model("llama-3.1-8b-instant")
-	// 		.temperature(0.7)
-	// 		.build();
-	// }
+	@Profile("local || me")
+	@Bean
+	public ChatOptions chatOptions() {
+		log.info("로컬 환경 openai embedding model 사용");
+
+		return ChatOptions
+				.builder()
+				.model("llama-3.1-8b-instant")
+				.temperature(0.7)
+				.build();
+	}
+
+	@Bean
+	public TokenTextSplitter textSplitter() {
+		return new TokenTextSplitter(
+				100, // chunkSize: 청크 크기
+				20, // overlap: 청크 간 중복
+				5, // minChunkSize: 최소 청크 크기
+				10000, // maxChunkSize: 최대 청크 크기
+				true // keepSeparator
+		);
+	}
 }

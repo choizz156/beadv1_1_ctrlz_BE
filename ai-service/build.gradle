@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     //ai
     implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+//    implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
     //vectordb
     implementation 'org.springframework.ai:spring-ai-starter-vector-store-qdrant'
 
@@ -83,4 +84,5 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+    maxHeapSize = "4g"
 }

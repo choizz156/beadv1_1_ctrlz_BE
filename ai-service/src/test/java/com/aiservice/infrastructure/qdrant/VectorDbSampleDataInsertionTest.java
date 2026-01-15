@@ -35,8 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 @ActiveProfiles({ "local", "secret" })
 class VectorDbBatchInsertionTest {
 
-	private static final int BATCH_SIZE = 512;
-	private static final int THREAD_POOL_SIZE = 8;
+	private static final int BATCH_SIZE = 50;
+	private static final int THREAD_POOL_SIZE = 1;
 
 	@Autowired
 	private VectorStore qdrantVectorStore;
