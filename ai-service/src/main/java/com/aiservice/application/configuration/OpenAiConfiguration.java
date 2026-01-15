@@ -9,7 +9,6 @@ import org.springframework.ai.openai.OpenAiEmbeddingModel;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.retry.RetryUtils;
-import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,7 @@ import org.springframework.context.annotation.Profile;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Profile("local")
+@Profile({"prod"})
 @Configuration
 public class OpenAiConfiguration {
 
@@ -40,12 +39,13 @@ public class OpenAiConfiguration {
 
 	@Bean
 	public EmbeddingModel embeddingModel(OpenAiApi openAiApi) {
-		log.info("운영 환경 openai embedding model 사용 - dimensions: {}", embeddingDimensions);
+		log.info("운영 환경 openai embedding model 사용 - dimensions: {}",
+			embeddingDimensions);
 		return new OpenAiEmbeddingModel(
 			openAiApi,
 			MetadataMode.EMBED,
 			OpenAiEmbeddingOptions.builder()
-				.model("text-embedding-3-large")
+				.model("text-embedding-3-small")
 				.dimensions(embeddingDimensions)
 				.build(),
 			RetryUtils.DEFAULT_RETRY_TEMPLATE);
@@ -64,16 +64,5 @@ public class OpenAiConfiguration {
 			.model("gpt-4o-mini")
 			.temperature(0.7)
 			.build();
-	}
-
-	@Bean
-	public TokenTextSplitter textSplitter() {
-		return new TokenTextSplitter(
-			100,    // chunkSize: 청크 크기
-			20,    // overlap: 청크 간 중복
-			5,      // minChunkSize: 최소 청크 크기
-			10000,  // maxChunkSize: 최대 청크 크기
-			true    // keepSeparator
-		);
 	}
 }

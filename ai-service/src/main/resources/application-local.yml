@@ -6,15 +6,16 @@ spring:
     name: ai-service
 
   ai:
-#    embedding:
-#      transformer:
-#        onnx:
-#          model-uri: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/onnx/model.onnx
-#        tokenizer:
-#          uri: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/raw/main/tokenizer.json
-#        cache:
-#          enabled: true
-#          directory: /tmp/spring-ai-onnx-cache
+    #    embedding:
+    #      transformer:
+    #        onnx:
+    #          model-uri: https://huggingface.co/Xenova/bge-m3/resolve/main/onnx/model.onnx
+    #        tokenizer:
+    #          uri: https://huggingface.co/Xenova/bge-m3/resolve/main/tokenizer.json
+    #        cache:
+    #          enabled: true
+    #          directory: /tmp/spring-ai-onnx-cache
+
 
     vectorstore:
       qdrant:
@@ -22,8 +23,6 @@ spring:
         port: 6334
         collection-name: products-post
         initialize-schema: true
-
-
 
   data:
     redis:

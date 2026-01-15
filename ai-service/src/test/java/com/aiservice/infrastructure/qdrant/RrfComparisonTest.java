@@ -36,8 +36,8 @@ public class RrfComparisonTest {
     // 비교 쿼리 목록
     private static final List<String> QUERIES = List.of(
             "갤럭시 S24", // 1. 정확한 모델명 (Keyword/ES 유리)
-            "사진 잘 나오는 핸드폰", // 2. 의미 기반 (Vector 유리)
-            "아이폰 15 프로 상태 좋은거" // 3. 복합 (RRF 유리)
+            "사진 잘 나오는 폰" // 2. 의미 기반 (Vector 유리)
+             // 3. 복합 (RRF 유리)
     );
 
     @Test
@@ -82,10 +82,11 @@ public class RrfComparisonTest {
 
 
             // Add to Table
-            markdownTable.append(String.format("| **%s** | Vector | %s | %s |\n", query, vectorTop1, vectorScore));
-            markdownTable.append(String.format("| | ES | %s | %s |\n", esTop1, esScore));
-            markdownTable.append(String.format("| | **RRF** | **%s** | **%s** |\n", rrfTop1, rrfScore));
-            markdownTable.append(String.format("| | **search** | **%s** | **%s** |\n", searchTop1, searchScore));
+            markdownTable.append(String.format("%s\n",query));
+            markdownTable.append(String.format("| Vector | %s | %s |\n", vectorTop1, vectorScore));
+            markdownTable.append(String.format("| ES | %s | %s |\n", esTop1, esScore));
+            markdownTable.append(String.format("| RRF | %s | %s |\n", rrfTop1, rrfScore));
+            markdownTable.append(String.format("| search | %s | %s |\n", searchTop1, searchScore));
         }
 
         System.out.println(markdownTable.toString());
@@ -127,9 +128,10 @@ public class RrfComparisonTest {
             String rrfScore = rrfResults.isEmpty() ? "-" : String.format("%.4f", rrfResults.getFirst().score());
 
             // Add to Table
-            markdownTable.append(String.format("| **%s** | Vector | %s | %s |\n", query, vectorTop1, vectorScore));
-            markdownTable.append(String.format("| | ES | %s | %s |\n", esTop1, esScore));
-            markdownTable.append(String.format("| | **RRF** | **%s** | **%s** |\n", rrfTop1, rrfScore));
+            markdownTable.append(String.format("**%s**"));
+            markdownTable.append(String.format("| Vector | %s | %s |\n", query, vectorTop1, vectorScore));
+            markdownTable.append(String.format("|  ES | %s | %s |\n", esTop1, esScore));
+            markdownTable.append(String.format("| **RRF** | **%s** | **%s** |\n", rrfTop1, rrfScore));
         }
 
         System.out.println(markdownTable.toString());

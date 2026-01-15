@@ -14,6 +14,7 @@ spring:
         collection-name: ${QDRANT_COLLECTION_NAME}
         initialize-schema: true
 
+
   data:
     redis:
       host: ${REDIS_HOST}
