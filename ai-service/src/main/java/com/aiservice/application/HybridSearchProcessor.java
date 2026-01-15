@@ -67,6 +67,7 @@ public class HybridSearchProcessor {
 		try {
 			String intent = classifyQueryIntent(q);
 			log.info("검색어 의도 분류 결과: {}", intent);
+
 			if (intent.contains("EXACT")) {
 				esWeight = 3.0; // 키워드 매칭 우선 (강화)
 				vectorWeight = 1.0;
